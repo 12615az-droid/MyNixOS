@@ -15,7 +15,7 @@
     ./modules/development.nix
     ./modules/packages.nix
 
-    ./modules/nvidia.nix
+    ./modules/hardware-nvidia.nix
     ./modules/disks.nix
     ./modules/virtualization.nix
   ];
