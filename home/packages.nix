@@ -15,6 +15,11 @@
     strawberry
     darktable
 
+
+    pavucontrol
+    qpwgraph
+    alsa-utils
+
     # Офис
     libreoffice-qt
 
