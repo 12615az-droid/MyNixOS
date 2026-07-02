@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ ... }:
 
 {
   users.users."popov" = {
@@ -11,8 +11,6 @@
       "libvirtd"
     ];
 
-    packages = with pkgs; [
-      kdePackages.kate
-    ];
+    
   };
 }

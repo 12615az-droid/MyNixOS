@@ -12,7 +12,7 @@
     ./modules/users.nix
     ./modules/nix-settings.nix
     ./modules/gaming.nix
-    ./modules/development.nix
+    ./modules/base-dev.nix
     ./modules/packages.nix
 
     ./modules/hardware-nvidia.nix
