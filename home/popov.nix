@@ -9,6 +9,7 @@
     ./kde.nix
     ./kde-preset.nix
     ./gaming.nix
+    ./baloo.nix
   ];
 
   home.username = "popov";
