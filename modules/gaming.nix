@@ -10,9 +10,7 @@
   };
 
   environment.systemPackages = with pkgs; [
-    mangohud
-    protonup-qt
-    vulkan-tools
+     vulkan-tools
     mesa-demos
   ];
 }
