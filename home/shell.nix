@@ -15,6 +15,10 @@
       nupdate = "cd /etc/nixos && sudo nix flake update && sudo nixos-rebuild switch --flake /etc/nixos#nixos";
 
       grep = "grep --color=auto";
+
+       nix2home = "mkdir -p ~/MyNixOS && rsync -av --delete --exclude .git --exclude result /etc/nixos/ ~/MyNixOS/";
+
+      home2nix = "cd ~/MyNixOS && sudo rsync -av --delete --chown=root:root --exclude .git --exclude result ./ /etc/nixos/";
     };
   };
 }

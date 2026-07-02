@@ -1,9 +1,0 @@
-result
-*.bak
-*.tmp
-*.swp
-.env
-.env.*
-secrets.nix
-*.key
-*.pem
