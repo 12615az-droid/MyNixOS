@@ -6,6 +6,7 @@
     ./shell.nix
     ./git.nix
     ./development.nix
+    ./kde.nix
   ];
 
   home.username = "popov";
