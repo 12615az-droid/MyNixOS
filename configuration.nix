@@ -15,8 +15,10 @@
     ./modules/base-dev.nix
     ./modules/packages.nix
 
+
     ./modules/hardware-nvidia.nix
     ./modules/disks.nix
+    ./modules/swap.nix
     ./modules/virtualization.nix
   ];
 

@@ -20,8 +20,6 @@
   # GUI-менеджер виртуалок.
   programs.virt-manager.enable = true;
 
-  # Нужен GTK-приложениям, в том числе virt-manager.
-  programs.dconf.enable = true;
 
   # По умолчанию используем системный libvirt, а не пользовательский qemu:///session.
   environment.sessionVariables.LIBVIRT_DEFAULT_URI = "qemu:///system";

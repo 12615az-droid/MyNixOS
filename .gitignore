@@ -1,0 +1,21 @@
+# Nix build result
+result
+result-*
+
+# Temporary files
+*.bak
+*.tmp
+*~
+.#*
+
+# Editors
+.vscode/
+.idea/
+
+# Direnv
+.direnv/
+.envrc
+
+# OS files
+.DS_Store
+Thumbs.db
