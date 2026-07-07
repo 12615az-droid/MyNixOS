@@ -6,10 +6,10 @@
     ./shell.nix
     ./git.nix
     ./development.nix
-    ./kde.nix
     ./kde-preset.nix
     ./gaming.nix
     ./baloo.nix
+    ./monitors.nix
   ];
 
   home.username = "popov";
