@@ -21,6 +21,14 @@
       home2nix-check = "cd ~/MyNixOS && sudo rsync -av --dry-run --delete --chown=root:root --exclude .git --exclude result --exclude README.md --exclude .gitignore ./ /etc/nixos/";
 
       home2nix = "cd ~/MyNixOS && sudo rsync -av --delete --chown=root:root --exclude .git --exclude result --exclude README.md --exclude .gitignore ./ /etc/nixos/";
+
+      watchnvidia = "watch -n 1 nvidia-smi";
+
+      watchnvidiab = "watch -n 0.5 'nvidia-smi --query-gpu=name,temperature.gpu,utilization.gpu,utilization.memory,memory.used,memory.total,power.draw --format=csv'";
+
+
+
+
     };
   };
 }

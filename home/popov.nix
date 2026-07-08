@@ -7,6 +7,7 @@
     ./git.nix
     ./development.nix
     ./kde-preset.nix
+    ./hyprland.nix
     ./gaming.nix
     ./baloo.nix
     ./monitors.nix

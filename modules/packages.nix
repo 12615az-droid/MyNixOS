@@ -18,6 +18,12 @@
  
     kdePackages.ksystemstats
 
+
+    kdePackages.partitionmanager
+    ntfs3g
+    parted
+    smartmontools
+
     lm_sensors
   ];
 }

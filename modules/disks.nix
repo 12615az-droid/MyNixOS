@@ -10,53 +10,31 @@
   systemd.tmpfiles.rules = [
     "d /home/popov/Drives 0755 popov users -"
     "d /home/popov/Drives/HDD1 0755 popov users -"
-    "d /home/popov/Drives/HDD2 0755 popov users -"
+    "d /home/popov/Drives/Toshiba 0755 popov users -"
+
   ];
 
-  # Первый NTFS-раздел HDD.
+   # HDD 2 TB, ext4.
   fileSystems."/home/popov/Drives/HDD1" = {
-    device = "/dev/disk/by-uuid/6C26324326320F18";
-    fsType = "ntfs3";
+    device = "/dev/disk/by-uuid/5f24ca9f-aa5b-4807-b66e-ac8e621ef819";
+    fsType = "ext4";
 
     options = [
-      # Чтение и запись.
       "rw"
-
-      # Все файлы на NTFS будут выглядеть как принадлежащие popov.
-      "uid=1000"
-      "gid=100"
-
-      # Права: владелец пишет, остальные читают.
-      "umask=0022"
-
-      # Запрещает имена файлов, несовместимые с Windows.
-      "windows_names"
-
-      # Не ломать загрузку системы, если диск вдруг отсутствует.
       "nofail"
-
-      # Не монтировать сразу при старте, а подключать при первом обращении.
       "x-systemd.automount"
-
-      # Если диском не пользовались 5 минут — размонтировать.
       "x-systemd.idle-timeout=300"
-
-      # Не ждать диск долго при загрузке.
       "x-systemd.device-timeout=5s"
     ];
   };
 
-  # Второй NTFS-раздел HDD.
-  fileSystems."/home/popov/Drives/HDD2" = {
-    device = "/dev/disk/by-uuid/0A966E5D966E48F1";
-    fsType = "ntfs3";
+   # Отдельный HDD Toshiba 500 GB, ext4.
+  fileSystems."/home/popov/Drives/Toshiba" = {
+    device = "/dev/disk/by-uuid/5297134a-6914-48ab-bac9-8ae884e9b05f";
+    fsType = "ext4";
 
     options = [
       "rw"
-      "uid=1000"
-      "gid=100"
-      "umask=0022"
-      "windows_names"
       "nofail"
       "x-systemd.automount"
       "x-systemd.idle-timeout=300"

@@ -33,6 +33,11 @@
     zip
     p7zip
 
+    iotop
+    nethogs
+    bandwhich
+    fzf
+
     # Учёт активности
     activitywatch
   ];
