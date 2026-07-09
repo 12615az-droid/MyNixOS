@@ -1,0 +1,118 @@
+* {
+    bg:          #0b0814f2;
+    bg-alt:      #151027f2;
+    surface:     #211735f2;
+    surface2:    #30204ef2;
+    text:        #f4efffff;
+    muted:       #a797c4ff;
+    purple:      #c77dffff;
+    violet:      #9d4eddff;
+    blue:        #7df9ffff;
+    red:         #ff5c8aff;
+
+    font: "JetBrainsMono Nerd Font 12";
+}
+
+window {
+    transparency: "real";
+    location: center;
+    anchor: center;
+    fullscreen: false;
+    width: 42%;
+    border: 2px;
+    border-color: @purple;
+    border-radius: 22px;
+    background-color: @bg;
+    padding: 16px;
+}
+
+mainbox {
+    background-color: transparent;
+    spacing: 12px;
+    children: [ inputbar, message, listview ];
+}
+
+inputbar {
+    background-color: @surface;
+    border: 1px;
+    border-color: @violet;
+    border-radius: 16px;
+    padding: 12px 14px;
+    spacing: 10px;
+    children: [ prompt, entry ];
+}
+
+prompt {
+    text-color: @blue;
+    font: "JetBrainsMono Nerd Font Bold 12";
+}
+
+entry {
+    placeholder: "поиск…";
+    placeholder-color: @muted;
+    text-color: @text;
+    background-color: transparent;
+}
+
+message {
+    padding: 0;
+    border-radius: 14px;
+    background-color: transparent;
+}
+
+textbox {
+    text-color: @muted;
+    background-color: transparent;
+}
+
+listview {
+    columns: 1;
+    lines: 8;
+    fixed-height: true;
+    dynamic: true;
+    scrollbar: false;
+    spacing: 6px;
+    background-color: transparent;
+}
+
+element {
+    background-color: transparent;
+    border: 1px;
+    border-color: transparent;
+    border-radius: 14px;
+    padding: 9px 10px;
+    spacing: 10px;
+}
+
+element normal.normal {
+    text-color: @text;
+}
+
+element alternate.normal {
+    background-color: #ffffff05;
+}
+
+element selected.normal {
+    background-color: @surface2;
+    border-color: @purple;
+    text-color: @text;
+}
+
+element urgent.normal {
+    text-color: @red;
+}
+
+element active.normal {
+    text-color: @blue;
+}
+
+element-icon {
+    size: 1.25em;
+    background-color: transparent;
+}
+
+element-text {
+    text-color: inherit;
+    background-color: transparent;
+    vertical-align: 0.5;
+}
