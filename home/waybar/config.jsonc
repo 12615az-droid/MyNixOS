@@ -1,22 +1,23 @@
 {
   "layer": "top",
   "position": "top",
-  "height": 36,
-  "spacing": 8,
+  "height": 38,
+  "spacing": 10,
   "margin-top": 10,
-  "margin-left": 10,
-  "margin-right": 10,
+  "margin-left": 12,
+  "margin-right": 12,
 
   "modules-left": [
+    "custom/launcher",
     "hyprland/workspaces"
   ],
 
   "modules-center": [
-    "idle_inhibitor",
     "clock"
   ],
 
   "modules-right": [
+    "idle_inhibitor",
     "cpu",
     "memory",
     "pulseaudio",
@@ -24,9 +25,31 @@
     "tray"
   ],
 
+  "custom/launcher": {
+    "format": "󰣇",
+    "tooltip": false,
+    "on-click": "rofi -show drun -theme ~/.config/rofi/purple-neon.rasi"
+  },
+
   "hyprland/workspaces": {
     "all-outputs": true,
     "on-click": "activate",
+    "format": "{icon}",
+    "format-icons": {
+      "1": "一",
+      "2": "二",
+      "3": "三",
+      "4": "四",
+      "5": "五",
+      "6": "六",
+      "7": "七",
+      "8": "八",
+      "9": "九",
+      "10": "十",
+      "active": "",
+      "urgent": "",
+      "default": ""
+    },
     "persistent-workspaces": {
       "*": [1,2,3,4,5,6,7,8,9,10]
     }
@@ -35,44 +58,49 @@
   "idle_inhibitor": {
     "format": "{icon}",
     "format-icons": {
-      "activated": "󰥔",
-      "deactivated": ""
-    }
+      "activated": "󰅶",
+      "deactivated": "󰾪"
+    },
+    "tooltip-format-activated": "Сон выключен",
+    "tooltip-format-deactivated": "Сон включён"
   },
 
   "clock": {
-    "format": "{:%a %d.%m  %H:%M}",
+    "format": "󰥔  {:%a %d.%m  %H:%M}",
+    "format-alt": "󰃭  {:%d %B %Y}",
     "tooltip-format": "<tt>{calendar}</tt>"
   },
 
   "cpu": {
-    "interval": 10,
-    "format": "󰍛 {usage}%"
+    "interval": 5,
+    "format": "󰍛 {usage}%",
+    "tooltip": true
   },
 
   "memory": {
-    "interval": 30,
+    "interval": 10,
     "format": "󰾆 {percentage}%"
   },
 
   "pulseaudio": {
     "format": "{icon} {volume}%",
-    "format-muted": "",
+    "format-muted": "󰖁 mute",
     "format-icons": {
-      "default": ["", "", ""]
+      "default": ["󰕿", "󰖀", "󰕾"]
     },
-    "on-click": "pavucontrol"
+    "on-click": "pavucontrol",
+    "on-click-right": "pamixer -t"
   },
 
   "network": {
-    "format-ethernet": "󱘖 Wired",
-    "format-wifi": "󰤨 Wi-Fi",
-    "format-disconnected": "󰤮 Off",
-    "tooltip-format": "{ipaddr}"
+    "format-ethernet": "󱘖 wired",
+    "format-wifi": "󰤨 {essid}",
+    "format-disconnected": "󰤮 offline",
+    "tooltip-format": "{ifname}: {ipaddr}"
   },
 
   "tray": {
-    "icon-size": 14,
-    "spacing": 6
+    "icon-size": 15,
+    "spacing": 8
   }
 }
