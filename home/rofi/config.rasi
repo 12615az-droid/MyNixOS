@@ -1,0 +1,19 @@
+configuration {
+    modi: "drun,run,window";
+    show-icons: true;
+    icon-theme: "Adwaita";
+    display-drun: "APPS";
+    display-run: "RUN";
+    display-window: "WIN";
+    drun-display-format: "{name}";
+    disable-history: false;
+    sidebar-mode: false;
+    matching: "fuzzy";
+    sort: true;
+    kb-row-up: "Up,Control+k";
+    kb-row-down: "Down,Control+j";
+    kb-accept-entry: "Return,KP_Enter";
+    kb-remove-to-eol: "Control+Shift+e";
+}
+
+@theme "purple-neon"
