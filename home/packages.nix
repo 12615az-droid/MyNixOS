@@ -33,6 +33,8 @@
     zip
     p7zip
 
+    scrcpy
+
     iotop
     nethogs
     bandwhich
