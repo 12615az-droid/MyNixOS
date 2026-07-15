@@ -1,12 +1,17 @@
 font=Noto Sans 10
-background-color=#1e1e2edd
-text-color=#cdd6f4
-border-color=#89b4fa
+background-color=#0b0018dd
+text-color=#f4eaff
+border-color=#b967ff
+progress-color=over #ff4fd8
 border-size=2
-border-radius=10
+border-radius=14
 padding=12
 margin=12
 default-timeout=5000
 anchor=top-right
 width=360
 height=120
+
+[urgency=high]
+border-color=#ff5c9a
+default-timeout=0
