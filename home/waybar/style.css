@@ -1,28 +1,22 @@
 * {
-    font-family: "JetBrains Mono", "Noto Sans", monospace;
+    font-family: "JetBrains Mono", "Noto Sans", sans-serif;
     font-size: 14px;
     margin: 0;
     padding: 0;
     border: none;
 }
 
-@define-color base   #1e1e2e;
-@define-color mantle #181825;
-@define-color crust  #11111b;
-
-@define-color text     #cdd6f4;
-@define-color surface0 #313244;
-@define-color surface1 #45475a;
-@define-color overlay0 #6c7086;
-
-@define-color blue      #89b4fa;
-@define-color lavender  #b4befe;
-@define-color sky       #89dceb;
-@define-color green     #a6e3a1;
-@define-color yellow    #f9e2af;
-@define-color red       #f38ba8;
-@define-color mauve     #cba6f7;
-@define-color peach     #fab387;
+@define-color bg        #080012;
+@define-color bg2       #140020;
+@define-color panel     rgba(18, 0, 34, 0.82);
+@define-color text      #f4eaff;
+@define-color muted     #9b87b7;
+@define-color purple    #b967ff;
+@define-color magenta   #ff4fd8;
+@define-color cyan      #70f0ff;
+@define-color green     #8cffb6;
+@define-color yellow    #ffe98a;
+@define-color red       #ff5c9a;
 
 window#waybar {
     background: transparent;
@@ -30,66 +24,108 @@ window#waybar {
 }
 
 tooltip {
-    background: @base;
-    border-radius: 9px;
-    border: 1px solid @blue;
+    background: @bg;
+    color: @text;
+    border-radius: 12px;
+    border: 1px solid @purple;
 }
 
 .modules-left,
 .modules-center,
 .modules-right {
-    background: alpha(@base, 0.88);
-    border: 1px solid @blue;
-    border-radius: 11px;
-    padding: 0 10px;
+    background: @panel;
+    border: 1px solid @purple;
+    border-radius: 18px;
+    padding: 6px 10px;
+    box-shadow: 0 0 18px alpha(@purple, 0.45);
 }
 
 .modules-center {
-    border-color: @overlay0;
+    border-color: @magenta;
+    padding-left: 12px;
+    padding-right: 12px;
 }
 
 #workspaces button {
-    color: @surface1;
-    padding: 2px 7px;
-    border-radius: 10px;
-    transition: all 0.25s ease;
+    min-width: 28px;
+    min-height: 28px;
+    color: @muted;
+    background: transparent;
+    border-radius: 14px;
+    padding: 0 8px;
+    margin: 0 2px;
+    transition: all 0.2s ease;
 }
 
 #workspaces button.active {
-    color: @peach;
-    background: alpha(@surface0, 0.8);
-    padding-left: 11px;
-    padding-right: 11px;
+    color: @bg;
+    background: linear-gradient(135deg, @purple, @magenta);
 }
 
 #workspaces button:hover {
     color: @text;
-    background: @surface0;
+    background: alpha(@purple, 0.28);
 }
 
-#idle_inhibitor {
-    color: @blue;
+#custom-launcher,
+#custom-firefox,
+#custom-dolphin,
+#custom-kitty,
+#custom-kate,
+#custom-telegram,
+#custom-discord,
+#custom-steam,
+#custom-heroic,
+#custom-lutris,
+#custom-libreoffice,
+#custom-settings,
+#custom-audio {
+    min-width: 36px;
+    min-height: 34px;
+    margin: 0 3px;
     padding: 0 7px;
+    color: @text;
+    background: alpha(@bg2, 0.72);
+    border-radius: 16px;
+    border: 1px solid alpha(@purple, 0.35);
+    transition: all 0.18s ease;
 }
 
+#custom-launcher {
+    color: @cyan;
+    border-color: @cyan;
+}
+
+#custom-firefox:hover,
+#custom-dolphin:hover,
+#custom-kitty:hover,
+#custom-kate:hover,
+#custom-telegram:hover,
+#custom-discord:hover,
+#custom-steam:hover,
+#custom-heroic:hover,
+#custom-lutris:hover,
+#custom-libreoffice:hover,
+#custom-settings:hover,
+#custom-audio:hover,
+#custom-launcher:hover {
+    color: @bg;
+    background: linear-gradient(135deg, @purple, @magenta);
+    border-color: @magenta;
+}
+
+#tray,
+#pulseaudio,
+#network,
+#cpu,
+#memory,
 #clock {
-    color: @yellow;
-    padding: 0 7px;
-}
-
-#cpu {
-    color: @yellow;
-    padding: 0 7px;
-}
-
-#memory {
-    color: @green;
-    padding: 0 7px;
+    color: @text;
+    padding: 0 8px;
 }
 
 #pulseaudio {
-    color: @lavender;
-    padding: 0 7px;
+    color: @purple;
 }
 
 #pulseaudio.muted {
@@ -97,10 +133,18 @@ tooltip {
 }
 
 #network {
-    color: @blue;
-    padding: 0 7px;
+    color: @cyan;
 }
 
-#tray {
-    padding: 0 7px;
+#cpu {
+    color: @yellow;
+}
+
+#memory {
+    color: @green;
+}
+
+#clock {
+    color: @magenta;
+    font-weight: 700;
 }
