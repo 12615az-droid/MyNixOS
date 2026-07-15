@@ -40,10 +40,27 @@ tooltip {
     box-shadow: 0 0 18px alpha(@purple, 0.45);
 }
 
+/* Пустые секции Waybar не должны рисовать неоновые овалы. */
+.modules-left:empty,
+.modules-center:empty,
+.modules-right:empty {
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
 .modules-center {
     border-color: @magenta;
     padding-left: 12px;
     padding-right: 12px;
+}
+
+.modules-center:empty {
+    padding-left: 0;
+    padding-right: 0;
 }
 
 #workspaces button {
