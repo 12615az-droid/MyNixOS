@@ -15,7 +15,6 @@
     strawberry
     darktable
 
-
     pavucontrol
     qpwgraph
     alsa-utils
@@ -39,8 +38,5 @@
     nethogs
     bandwhich
     fzf
-
-    # Учёт активности
-    activitywatch
   ];
 }
