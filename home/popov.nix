@@ -11,6 +11,7 @@
     ./gaming.nix
     ./baloo.nix
     ./monitors.nix
+    ./hpr.nix
   ];
 
   home.username = "popov";
