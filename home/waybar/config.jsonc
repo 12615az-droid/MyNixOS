@@ -1,5 +1,6 @@
 [
   {
+    "name": "topbar",
     "layer": "top",
     "position": "top",
     "height": 34,
@@ -80,6 +81,7 @@
   },
 
   {
+    "name": "dock",
     "layer": "top",
     "position": "bottom",
     "height": 54,
