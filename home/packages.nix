@@ -10,6 +10,8 @@
     ayugram-desktop
     discord
 
+    qbittorrent
+
     # Мультимедиа
     vlc
     strawberry
@@ -32,6 +34,7 @@
     unzip
     zip
     p7zip
+    unrar
 
     scrcpy
 
