@@ -20,7 +20,7 @@
     pavucontrol
     qpwgraph
     alsa-utils
-
+nvtopPackages.full
     # Офис
     libreoffice-qt
 
@@ -34,6 +34,7 @@
     zip
     p7zip
     unrar
+    tcpdump
 
     scrcpy
 
