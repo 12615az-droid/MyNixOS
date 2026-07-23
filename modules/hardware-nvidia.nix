@@ -1,37 +1,46 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
-  # Используем проприетарный драйвер NVIDIA.
-  services.xserver.videoDrivers = [ "nvidia" ];
+  # Intel + NVIDIA.
+  services.xserver.videoDrivers = [
+    "modesetting"
+    "nvidia"
+  ];
 
-  # OpenGL/Vulkan и 32-битные библиотеки для Steam/Proton.
+  # Intel должна запускаться как можно раньше.
+  boot.initrd.kernelModules = [ "i915" ];
+
   hardware.graphics = {
     enable = true;
     enable32Bit = true;
+
+    extraPackages = with pkgs; [
+      # Аппаратное декодирование видео Intel UHD 730.
+      intel-media-driver
+    ];
   };
 
   hardware.nvidia = {
-    # Нужно для нормальной работы NVIDIA с Wayland/XWayland.
     modesetting.enable = true;
-
-    # Утилита nvidia-settings.
     nvidiaSettings = true;
 
-    # Для GTX 1060 нужен закрытый модуль.
+    # GTX 1060 требует закрытого модуля.
     open = false;
 
-    # Драйвер NVIDIA 580 legacy.
-    package = config.boot.kernelPackages.nvidiaPackages.legacy_580;
+    # GTX 1060 относится к Pascal и использует legacy 580.
+    package =
+      config.boot.kernelPackages.nvidiaPackages.legacy_580;
 
-    # Фикс артефактов после сна.
     powerManagement.enable = true;
     powerManagement.finegrained = false;
 
-    # Держит NVIDIA-драйвер инициализированным.
     nvidiaPersistenced = true;
+
+    # Пока PRIME-режимы не включаем.
+    # Для Wayland оба GPU доступны композитору напрямую.
   };
 
-  # Принудительно сохраняем видеопамять при suspend/resume.
+  # Сохранение видеопамяти при suspend/resume.
   boot.extraModprobeConfig = ''
     options nvidia NVreg_PreserveVideoMemoryAllocations=1 NVreg_TemporaryFilePath=/var/tmp
   '';

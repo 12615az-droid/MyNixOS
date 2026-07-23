@@ -10,16 +10,17 @@
     ayugram-desktop
     discord
 
+    qbittorrent
+
     # Мультимедиа
     vlc
     strawberry
     darktable
 
-
     pavucontrol
     qpwgraph
     alsa-utils
-
+nvtopPackages.full
     # Офис
     libreoffice-qt
 
@@ -32,6 +33,8 @@
     unzip
     zip
     p7zip
+    unrar
+    tcpdump
 
     scrcpy
 
@@ -39,8 +42,5 @@
     nethogs
     bandwhich
     fzf
-
-    # Учёт активности
-    activitywatch
   ];
 }
