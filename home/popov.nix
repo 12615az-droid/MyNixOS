@@ -10,6 +10,7 @@
     ./gaming.nix
     ./baloo.nix
     ./monitors.nix
+    ./fastfetch.nix
     ./hpr.nix
   ];
 

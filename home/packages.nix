@@ -25,7 +25,6 @@ nvtopPackages.full
     libreoffice-qt
 
     # Пользовательские утилиты
-    fastfetch
     btop
     htop
     tree
