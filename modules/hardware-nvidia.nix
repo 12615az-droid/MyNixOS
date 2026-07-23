@@ -37,7 +37,6 @@
     nvidiaPersistenced = true;
 
     # Пока PRIME-режимы не включаем.
-    # Для Wayland оба GPU доступны композитору напрямую.
   };
 
   # Сохранение видеопамяти при suspend/resume.
