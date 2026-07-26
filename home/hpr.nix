@@ -61,7 +61,7 @@ in
   xdg.desktopEntries.hpr = {
     name = "HPR";
     genericName = "Activity tracker";
-    comment = "Local activity tracker for KDE Plasma Wayland";
+    comment = "Local activity tracker for KDE Plasma";
     exec = "${config.home.homeDirectory}/.local/bin/HPR";
     terminal = false;
     categories = [ "Utility" ];
@@ -72,7 +72,7 @@ in
     [Desktop Entry]
     Type=Application
     Name=HPR
-    Comment=Local activity tracker for KDE Plasma Wayland
+    Comment=Local activity tracker for KDE Plasma
     Exec=${config.home.homeDirectory}/.local/bin/HPR
     Terminal=false
     X-KDE-autostart-after=panel

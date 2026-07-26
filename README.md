@@ -32,35 +32,20 @@
 
 ### Рабочее окружение
 
-Доступны две графические сессии:
-
-- KDE Plasma 6 + SDDM
-- Hyprland + XWayland
-
-Для Plasma через Plasma Manager настроены:
-
+- KDE Plasma 6
+- SDDM
 - Breeze Dark
 - Noto Sans и JetBrains Mono
-- горячие клавиши
+- горячие клавиши через Plasma Manager
 - отключение автоматического сна и выключения экрана от сети
 - настройки блокировки экрана
-
-Для Hyprland настроены:
-
-- Kitty
-- Waybar
-- Rofi
-- Mako
-- история буфера обмена через Cliphist
-- скриншоты через Grim, Slurp и Swappy
-- управление звуком и мультимедиа
-- рабочие столы и горячие клавиши
-- Wayland-настройки для Electron, Firefox и Qt
+- KDE Connect
 
 ### Видео и мониторы
 
+- Intel UHD 730 + NVIDIA GTX 1060
 - проприетарный драйвер NVIDIA
-- пакет драйвера `legacy_580` для GTX 1060
+- пакет драйвера `legacy_580`
 - NVIDIA modesetting
 - 32-битные графические библиотеки для Steam и Proton
 - сохранение видеопамяти при suspend/resume
@@ -143,8 +128,9 @@
 - Darktable
 - Discord
 - AyuGram Desktop
+- qBittorrent
 - scrcpy
-- ActivityWatch
+- HPR
 - Fastfetch
 - btop
 - htop
@@ -166,11 +152,10 @@
 │   ├── audio.nix               # PipeWire и звук
 │   ├── base-dev.nix            # Базовые инструменты разработки
 │   ├── boot.nix                # systemd-boot, Plymouth, тихая загрузка
-│   ├── desktop-hyprland.nix    # Hyprland и системные Wayland-утилиты
 │   ├── desktop-kde.nix         # Plasma 6, SDDM, раскладки, KDE Connect
 │   ├── disks.nix               # Монтирование дополнительных дисков
 │   ├── gaming.nix              # Steam, GameMode, Vulkan
-│   ├── hardware-nvidia.nix     # Драйвер и настройки NVIDIA
+│   ├── hardware-nvidia.nix     # Intel, NVIDIA и графические драйверы
 │   ├── locale.nix              # Локаль, часовой пояс, консольная раскладка
 │   ├── network.nix             # Имя хоста и NetworkManager
 │   ├── nix-settings.nix        # Flakes, unfree, nix-ld, GC и оптимизация
@@ -186,13 +171,10 @@
     ├── git.nix                 # Настройки Git
     ├── shell.nix               # Bash и алиасы
     ├── kde-preset.nix          # Настройки Plasma Manager
-    ├── hyprland.nix            # Установка конфигов Hyprland/Waybar/Mako
     ├── baloo.nix               # Исключения индексатора Baloo
     ├── monitors.nix            # Профиль двух мониторов autorandr
-    ├── hypr/hyprland.conf      # Основной конфиг Hyprland
-    ├── waybar/config.jsonc     # Модули Waybar
-    ├── waybar/style.css        # Оформление Waybar
-    └── mako/config             # Настройки уведомлений Mako
+    ├── fastfetch.nix           # Настройка Fastfetch
+    └── hpr.nix                 # Установка и автозапуск HPR
 ```
 
 ## Сборка и применение
