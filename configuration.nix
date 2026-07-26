@@ -14,8 +14,11 @@
     ./modules/gaming.nix
     ./modules/base-dev.nix
     ./modules/packages.nix
+        ./modules/printer.nix
+        ./modules/bluetooth.nix
 
     ./modules/hardware-nvidia.nix
+    #./modules/hardware-intel.nix
     ./modules/disks.nix
     ./modules/swap.nix
     ./modules/virtualization.nix
