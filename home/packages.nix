@@ -25,7 +25,6 @@ nvtopPackages.full
     libreoffice-qt
 
     # Пользовательские утилиты
-    btop
     htop
     tree
     duf
@@ -36,6 +35,8 @@ nvtopPackages.full
     tcpdump
 
     scrcpy
+
+
 
     iotop
     nethogs

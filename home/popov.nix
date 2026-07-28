@@ -11,8 +11,9 @@
     ./baloo.nix
     ./monitors.nix
     ./fastfetch.nix
-    ./hpr.nix
+    ./btop.nix
     ./adGuardVpn.nix
+    ./function
   ];
 
   home.username = "popov";

@@ -5,14 +5,16 @@
     enable = true;
 
     shellAliases = {
-      ll = "ls -lah";
+     ll = "ls -lah";
 
-      rebuild = "sudo nixos-rebuild switch --flake ~/MyNixOS#nixos";
-      nbuild = "sudo nixos-rebuild build --flake ~/MyNixOS#nixos";
-      ntest = "sudo nixos-rebuild test --flake ~/MyNixOS#nixos";
+     sbtop= "sudo btop";
+
+      rebuild = "cd  ~/MyNixOS  && sudo nixos-rebuild switch --flake  .#nixos";
+      nbuild = "cd  ~/MyNixOS  && sudo nixos-rebuild build --flake .#nixos";
+      ntest = "cd   ~/MyNixOS  && sudo nixos-rebuild test --flake .#nixos";
 
       nclean = "sudo nix-collect-garbage -d";
-      nupdate = "cd ~/MyNixOS && sudo nix flake update && sudo nixos-rebuild switch --flake ~/MyNixOS#nixos";
+      nupdate = "cd  ~/MyNixOS  && sudo nix flake update && sudo nixos-rebuild switch --flake .#nixos";
 
       grep = "grep --color=auto";
 

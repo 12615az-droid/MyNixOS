@@ -1,46 +1,36 @@
-{ config, pkgs, lib, ... }:
+{ config, ... }:
 
 {
-  # Intel + NVIDIA.
-  services.xserver.videoDrivers = [
-    "modesetting"
-    "nvidia"
-  ];
+  nixpkgs.config.allowUnfree = true;
 
-  # Intel должна запускаться как можно раньше.
-  boot.initrd.kernelModules = [ "i915" ];
+  # Использовать драйвер NVIDIA.
+  # Название xserver историческое — Wayland продолжает работать.
+  services.xserver.videoDrivers = [ "nvidia" ];
 
-  hardware.graphics = {
-    enable = true;
-    enable32Bit = true;
+  # Отключить Intel UHD 730 в обычной NVIDIA-конфигурации.
+  # В резервной specialisation этот параметр потом переопределим.
+ # boot.kernelParams = [
+ #   "module_blacklist=i915"
+ # ];
 
-    extraPackages = with pkgs; [
-      # Аппаратное декодирование видео Intel UHD 730.
-      intel-media-driver
-    ];
-  };
+ # boot.blacklistedKernelModules = [
+   # "i915"
+ # ];
 
   hardware.nvidia = {
-    modesetting.enable = true;
-    nvidiaSettings = true;
-
-    # GTX 1060 требует закрытого модуля.
+    # GTX 1060 — Pascal
     open = false;
 
-    # GTX 1060 относится к Pascal и использует legacy 580.
+    # DRM/KMS для KDE Wayland
+    modesetting.enable = true;
+
+    powerManagement = {
+      # Сохранение видеопамяти
+      enable = true;
+      finegrained = false;
+    };
+
     package =
       config.boot.kernelPackages.nvidiaPackages.legacy_580;
-
-    powerManagement.enable = true;
-    powerManagement.finegrained = false;
-
-    nvidiaPersistenced = true;
-
-    # Пока PRIME-режимы не включаем.
   };
-
-  # Сохранение видеопамяти при suspend/resume.
-  boot.extraModprobeConfig = ''
-    options nvidia NVreg_PreserveVideoMemoryAllocations=1 NVreg_TemporaryFilePath=/var/tmp
-  '';
 }
