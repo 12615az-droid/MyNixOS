@@ -1,8 +1,7 @@
 { config, pkgs, ... }:
 
 {
-  # Поддержка NTFS через kernel-драйвер ntfs3.
-  # Нужно для твоих HDD, которые остались в NTFS.
+
   boot.supportedFilesystems = [ "ntfs3" ];
 
   # Папка, где будут лежать примонтированные диски.

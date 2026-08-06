@@ -1,21 +1,25 @@
-programs.zsh = {
-  enable = true;
+{ ... }:
 
-  initContent = ''
-    rebuildVPN() {
-      local server="$1"
-      local ip="$2"
-      local configDir="$HOME/NixOS-vpnServer"
+{
+  programs.bash = {
+    enable = true;
 
-      if [[ -z "$server" || -z "$ip" ]]; then
-        echo "Использование: rebuildVPN <имя-сервера> <IP>"
-        return 1
-      fi
+    initExtra = ''
+      rebuildVPN() {
+        local server="$1"
+        local ip="$2"
+        local configDir="$HOME/NixOS-vpnServer"
 
-      nixos-rebuild switch \
-        --flake "$configDir#$server" \
-        --target-host "admin@$ip" \
-        --sudo
-    }
-  '';
-};
+        if [[ -z "$server" || -z "$ip" ]]; then
+          echo "Использование: rebuildVPN <имя-сервера> <IP>"
+          return 1
+        fi
+
+        nixos-rebuild switch \
+          --flake "$configDir#$server" \
+          --target-host "admin@$ip" \
+          --sudo
+      }
+    '';
+  };
+}

@@ -30,12 +30,27 @@
 
       modules = [
         {
+          type = "custom";
+          format = "──────────── USER ─────────────";
+          outputColor = "blue";
+        }
+
+        {
           type = "title";
         }
 
         {
           type = "custom";
-          format = "────────────────────────────────";
+          key = "GitHub";
+          format = "https://github.com/12615az-droid";
+          keyColor = "cyan";
+        }
+
+        "break"
+
+        {
+          type = "custom";
+          format = "───────────── OS ──────────────";
           outputColor = "blue";
         }
 
@@ -43,12 +58,6 @@
           type = "os";
           key = "OS";
           keyColor = "cyan";
-        }
-
-        {
-          type = "host";
-          key = "Host";
-          keyColor = "blue";
         }
 
         {
@@ -81,14 +90,26 @@
           keyColor = "blue";
         }
 
+        "break"
+
+        {
+          type = "custom";
+          format = "────────── HARDWARE ───────────";
+          outputColor = "blue";
+        }
+
+        {
+          type = "host";
+          key = "Host";
+          keyColor = "blue";
+        }
+
         {
           type = "monitor";
           key = "Monitor {index}";
           keyColor = "cyan";
           format = "{width}x{height} @ {refresh-rate} Hz";
         }
-
-        "break"
 
         {
           type = "cpu";
@@ -108,6 +129,8 @@
           key = "Memory";
           keyColor = "magenta";
         }
+
+
 
         {
           type = "disk";

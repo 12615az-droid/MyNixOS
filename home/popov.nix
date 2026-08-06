@@ -13,7 +13,8 @@
     ./fastfetch.nix
     ./btop.nix
     ./adGuardVpn.nix
-    ./function
+    ./function.nix
+    ./mangohub.nix
   ];
 
   home.username = "popov";

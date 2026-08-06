@@ -1,21 +1,17 @@
 { config, ... }:
 
 {
-  nixpkgs.config.allowUnfree = true;
 
+hardware.graphics = {
+    enable = true;
+
+    # Steam, Wine и другие 32-битные приложения
+    enable32Bit = true;
+    };
   # Использовать драйвер NVIDIA.
   # Название xserver историческое — Wayland продолжает работать.
   services.xserver.videoDrivers = [ "nvidia" ];
 
-  # Отключить Intel UHD 730 в обычной NVIDIA-конфигурации.
-  # В резервной specialisation этот параметр потом переопределим.
- # boot.kernelParams = [
- #   "module_blacklist=i915"
- # ];
-
- # boot.blacklistedKernelModules = [
-   # "i915"
- # ];
 
   hardware.nvidia = {
     # GTX 1060 — Pascal
