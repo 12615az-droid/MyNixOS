@@ -2,19 +2,19 @@
 
 {
   imports = [
+    ./adGuardVpn.nix
+    ./baloo.nix
+    ./btop.nix
+    ./development.nix
+    ./fastfetch.nix
+    ./function.nix
+    ./gaming.nix
+    ./git.nix
+    ./kde-preset.nix
+    ./mangohud.nix
+    ./monitors.nix
     ./packages.nix
     ./shell.nix
-    ./git.nix
-    ./development.nix
-    ./kde-preset.nix
-    ./gaming.nix
-    ./baloo.nix
-    ./monitors.nix
-    ./fastfetch.nix
-    ./btop.nix
-    ./adGuardVpn.nix
-    ./function.nix
-    ./mangohub.nix
   ];
 
   home.username = "popov";

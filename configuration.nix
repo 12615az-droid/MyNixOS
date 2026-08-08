@@ -1,29 +1,10 @@
-{ config, pkgs, ... }:
+{ ... }:
 
 {
   imports = [
-    ./hardware-configuration.nix
-
-    ./modules/boot.nix
-    ./modules/network.nix
-    ./modules/locale.nix
-    ./modules/desktop-kde.nix
-    ./modules/audio.nix
-    ./modules/users.nix
-    ./modules/nix-settings.nix
-    ./modules/gaming.nix
-    ./modules/base-dev.nix
-    ./modules/packages.nix
-        ./modules/printer.nix
-        ./modules/bluetooth.nix
-         ./modules/obs.nix
-
-    ./modules/hardware-nvidia.nix
-      #./modules/intel-rescue.nix
-    #./modules/hardware-intel.nix
-    ./modules/disks.nix
-    ./modules/swap.nix
-    ./modules/virtualization.nix
+    ./hosts/nixos
+    ./modules
+    ./home
   ];
 
   system.stateVersion = "26.05";
