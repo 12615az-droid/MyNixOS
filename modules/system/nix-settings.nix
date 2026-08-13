@@ -23,4 +23,5 @@
     automatic = true;
     dates = [ "weekly" ];
   };
+  nixpkgs.config.android_sdk.accept_license = true;
 }

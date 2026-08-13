@@ -7,6 +7,6 @@
     ./programs
     ./virtualization
 
-    ./users/popov.nix
+    ./users
   ];
 }

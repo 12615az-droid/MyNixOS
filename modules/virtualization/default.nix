@@ -28,14 +28,6 @@
 
 
 
-networking = {
-  firewall = {
-    trustedInterfaces = [ "virbr0" ];
-
-
-  };
-
-};
   # Папки для ISO и дисков виртуалок.
   systemd.tmpfiles.rules = [
     "d /home/popov/VMs 0755 popov users -"

@@ -2,12 +2,7 @@
 
 {
 
-hardware.graphics = {
-    enable = true;
 
-    # Steam, Wine и другие 32-битные приложения
-    enable32Bit = true;
-    };
   # Использовать драйвер NVIDIA.
   # Название xserver историческое — Wayland продолжает работать.
   services.xserver.videoDrivers = [ "nvidia" ];
