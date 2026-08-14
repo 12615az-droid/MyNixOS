@@ -10,7 +10,7 @@
     ./function.nix
     ./gaming.nix
     ./git.nix
-    ./kde-preset.nix
+    ./kde-preset
     ./mangohud.nix
     ./monitors.nix
     ./packages.nix
