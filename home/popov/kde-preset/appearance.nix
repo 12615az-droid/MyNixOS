@@ -1,5 +1,8 @@
 { pkgs, ... }:
 
+let
+  theme = import ./theme.nix { inherit pkgs; };
+in
 {
   programs.plasma = {
     workspace = {
@@ -10,10 +13,7 @@
       colorScheme = "BreezeLight";
       iconTheme = "breeze";
 
-      wallpaper =
-        "${pkgs.kdePackages.plasma-workspace-wallpapers}"
-        + "/share/wallpapers/ScarletTree/contents/images/5120x2880.png";
-
+      wallpaper = theme.wallpaper;
       wallpaperFillMode = "preserveAspectCrop";
     };
 
@@ -22,7 +22,7 @@
       runAlways = true;
 
       text = ''
-        plasma-apply-colorscheme --accent-color "#8B5CF6"
+        plasma-apply-colorscheme --accent-color "${theme.accent}"
       '';
     };
   };

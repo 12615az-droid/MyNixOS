@@ -16,6 +16,7 @@
     vlc
     strawberry
     darktable
+    inkscape
 
     pavucontrol
     qpwgraph

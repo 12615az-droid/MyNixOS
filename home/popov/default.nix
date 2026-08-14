@@ -15,6 +15,7 @@
     ./monitors.nix
     ./packages.nix
     ./shell.nix
+
   ];
 
   home.username = "popov";

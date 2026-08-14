@@ -7,6 +7,7 @@
     ./shortcuts.nix
     ./lockscreen.nix
     ./power.nix
+    ./file-icons.nix
   ];
 
   programs.plasma.enable = true;
