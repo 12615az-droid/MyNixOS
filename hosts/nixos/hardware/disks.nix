@@ -9,7 +9,6 @@
   systemd.tmpfiles.rules = [
     "d /home/popov/Drives 0755 popov users -"
     "d /home/popov/Drives/HDD1 0755 popov users -"
-    "d /home/popov/Drives/Toshiba 0755 popov users -"
 
   ];
 
@@ -27,17 +26,4 @@
     ];
   };
 
-   # Отдельный HDD Toshiba 500 GB, ext4.
-  fileSystems."/home/popov/Drives/Toshiba" = {
-    device = "/dev/disk/by-uuid/5297134a-6914-48ab-bac9-8ae884e9b05f";
-    fsType = "ext4";
-
-    options = [
-      "rw"
-      "nofail"
-      "x-systemd.automount"
-      "x-systemd.idle-timeout=300"
-      "x-systemd.device-timeout=5s"
-    ];
-  };
 }
