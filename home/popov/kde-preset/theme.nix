@@ -1,9 +1,15 @@
 { pkgs }:
 
+let
+  wallpapers = ~/MyNixOS/home/popov/wallpapers;
+in
 {
   accent = "#6A0DAD";
 
-  wallpaper =
-    "${pkgs.kdePackages.plasma-workspace-wallpapers}"
-    + "/share/wallpapers/ScarletTree/contents/images/5120x2880.png";
+  # Папка со всеми твоими обоями
+  wallpaperDir = wallpapers;
+
+  # Одна картинка остаётся для мест, где требуется именно файл,
+  # например для SDDM
+  wallpaper = "${wallpapers}/01.*";
 }
