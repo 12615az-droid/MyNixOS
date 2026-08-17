@@ -14,25 +14,34 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.home-manager.follows = "home-manager";
     };
+
+agenix = {
+  url = "github:ryantm/agenix";
+  inputs.nixpkgs.follows = "nixpkgs";
+};
   };
 
-  outputs = { self, nixpkgs, home-manager, plasma-manager, ... }: {
+  outputs = { self, nixpkgs, home-manager, plasma-manager,agenix, ... }: {
     nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
 
-      modules = [
-        ./configuration.nix
+     modules = [
+  ./configuration.nix
 
-        home-manager.nixosModules.home-manager
+  agenix.nixosModules.default
 
-        {
-          home-manager.sharedModules = [
-            plasma-manager.homeModules.plasma-manager
-          ];
+  home-manager.nixosModules.home-manager
 
+  {
+    environment.systemPackages = [
+      agenix.packages.x86_64-linux.default
+    ];
 
-        }
-      ];
+    home-manager.sharedModules = [
+      plasma-manager.homeModules.plasma-manager
+    ];
+  }
+];
     };
   };
 }

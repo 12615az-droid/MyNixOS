@@ -13,15 +13,14 @@ in
       colorScheme = "BreezeLight";
       iconTheme = "breeze";
 
-     wallpaperSlideShow = {
-      path = theme.wallpaperDir;
+      wallpaperSlideShow = {
+        path = theme.wallpaperDir;
 
-      # раз в сутки
-      interval = 24 * 60 * 60;
-    };
+        # 24 часа
+        interval = 24 * 60 * 60;
+      };
 
-    wallpaperFillMode = "preserveAspectCrop";
-  };
+      wallpaperFillMode = "preserveAspectCrop";
     };
 
     startup.startupScript."purple-accent" = {

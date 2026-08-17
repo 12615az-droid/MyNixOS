@@ -1,15 +1,13 @@
 { pkgs }:
 
-let
-  wallpapers = ~/MyNixOS/home/popov/wallpapers;
-in
 {
   accent = "#6A0DAD";
 
-  # Папка со всеми твоими обоями
-  wallpaperDir = wallpapers;
+  # Вся папка с обоями.
+  # Nix сам положит её в /nix/store.
+  wallpaperDir = ../wallpaper;
 
-  # Одна картинка остаётся для мест, где требуется именно файл,
-  # например для SDDM
-  wallpaper = "${wallpapers}/01.*";
+  # Одиночная картинка для того,
+  # что не умеет slideshow.
+  wallpaper = ../wallpaper/1.jpg;
 }

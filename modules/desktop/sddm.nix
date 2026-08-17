@@ -1,13 +1,12 @@
 { pkgs, ... }:
 
 let
-  # Те же обои, что используются в Plasma
-  wallpaper =
-    "${pkgs.kdePackages.plasma-workspace-wallpapers}"
-    + "/share/wallpapers/ScarletTree/contents/images/5120x2880.png";
+  theme = import ../../home/popov/kde-preset/theme.nix {
+    inherit pkgs;
+  };
 
-  # Берём стандартную KDE Breeze тему SDDM
-  # и добавляем к ней свой конфиг.
+  wallpaper = theme.wallpaper;
+
   breezeScarlet = pkgs.runCommand "sddm-breeze-scarlet" { } ''
     mkdir -p $out/share/sddm/themes/breeze-scarlet
 
@@ -31,16 +30,13 @@ in
   services.displayManager.sddm = {
     enable = true;
 
-    # Используем нашу модификацию Breeze
     theme =
       "${breezeScarlet}"
       + "/share/sddm/themes/breeze-scarlet";
 
-    settings = {
-      Theme = {
-        CursorTheme = "breeze_cursors";
-        CursorSize = 24;
-      };
+    settings.Theme = {
+      CursorTheme = "breeze_cursors";
+      CursorSize = 24;
     };
   };
 }
