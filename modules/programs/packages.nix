@@ -1,7 +1,15 @@
 { pkgs, ... }:
 
 {
-  programs.firefox.enable = true;
+programs.firefox = {
+  enable = true;
+
+  languagePacks = [ "ru" ];
+
+  preferences = {
+    "intl.locale.requested" = "ru";
+  };
+};
 
   services.printing.enable = true;
   services.flatpak.enable = true;
