@@ -20,9 +20,12 @@
       hiding = "autohide";
 
       widgets = [
+      {
         # Меню приложений
-        "org.kde.plasma.kickoff"
-
+       kickoff = {
+    icon = "nix-snowflake";
+  };
+  }
         # Закреплённые программы
         {
           iconTasks = {

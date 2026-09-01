@@ -14,6 +14,12 @@ programs.firefox = {
   services.printing.enable = true;
   services.flatpak.enable = true;
 
+
+  services.hardware.openrgb = {
+  enable = true;
+  motherboard = "amd";
+};
+
   environment.systemPackages = with pkgs; [
     curl
     wget

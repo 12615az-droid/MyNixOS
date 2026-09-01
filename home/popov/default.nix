@@ -16,6 +16,7 @@
     ./packages.nix
     ./shell.nix
     ./ssh.nix
+   ./Bottom.nix
 
   ];
 

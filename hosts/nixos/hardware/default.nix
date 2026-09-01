@@ -4,7 +4,7 @@
   imports = [
     ../hardware-configuration.nix
 
-    ./nvidia.nix
+    ./amdgpu.nix
     ./disks.nix
     ./bootloader.nix
   ];

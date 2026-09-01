@@ -35,6 +35,8 @@ nvtopPackages.full
     unrar
     tcpdump
 
+
+
     scrcpy
 
 

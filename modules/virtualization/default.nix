@@ -1,9 +1,16 @@
 { config, pkgs, ... }:
 
+
+
 {
+
+
   # Основной стек виртуализации: libvirt + QEMU/KVM.
   virtualisation.libvirtd = {
     enable = true;
+     qemu.vhostUserPackages = with pkgs; [
+virtiofsd
+    ];
 
     qemu = {
       # QEMU с поддержкой KVM. Это быстрые виртуалки через аппаратную виртуализацию.

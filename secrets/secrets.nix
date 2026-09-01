@@ -6,7 +6,5 @@ let
 in
 {
  "github_ed25519.age".publicKeys = [ recovery ];
-  "server_ed25519.age".publicKeys = [ recovery ];
-  "vpn_nm_env.age".publicKeys = [ recovery ];
 }
 
