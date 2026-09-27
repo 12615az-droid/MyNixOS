@@ -5,6 +5,8 @@
 
 networking.firewall.allowedUDPPorts = [ 5353 ];
 
+networking.networkmanager.wifi.powersave = false;
+
 
 services.openssh = {
   enable = true;

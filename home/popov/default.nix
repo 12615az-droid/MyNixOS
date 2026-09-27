@@ -17,6 +17,7 @@
     ./shell.nix
     ./ssh.nix
    ./Bottom.nix
+   ./zed.nix
 
   ];
 

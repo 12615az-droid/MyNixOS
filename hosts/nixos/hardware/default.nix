@@ -7,5 +7,6 @@
     ./amdgpu.nix
     ./disks.nix
     ./bootloader.nix
+    ./nonrgb.nix
   ];
 }

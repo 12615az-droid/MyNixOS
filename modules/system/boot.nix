@@ -15,5 +15,11 @@
       "quiet"
       "udev.log_level=3"
     ];
+
+
+
+extraModprobeConfig = ''
+  options rtw89_core disable_ps_mode=Y
+'';
   };
 }
