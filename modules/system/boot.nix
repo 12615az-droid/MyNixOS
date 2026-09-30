@@ -1,4 +1,4 @@
-{ ... }:
+{ config, ... }:
 
 {
   boot = {
@@ -21,5 +21,17 @@
 extraModprobeConfig = ''
   options rtw89_core disable_ps_mode=Y
 '';
-  };
+
+
+extraModulePackages = [
+    config.boot.kernelPackages.nct6687d
+  ];
+
+  kernelModules = [ "nct6687" ];
+
+ blacklistedKernelModules = [
+    "nct6683"
+  ];
+ };
+
 }

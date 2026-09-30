@@ -11,6 +11,10 @@ programs.firefox = {
   };
 };
 
+services.lact.enable = true;
+hardware.amdgpu.overdrive.enable = true;
+programs.coolercontrol.enable = true;
+
   services.printing.enable = true;
   services.flatpak.enable = true;
 

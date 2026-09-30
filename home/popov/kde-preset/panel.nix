@@ -7,6 +7,7 @@
 
       # Панель на всю ширину
       lengthMode = "fill";
+      screen ="all";
 
       # Не плавает над краем экрана
       floating = false;

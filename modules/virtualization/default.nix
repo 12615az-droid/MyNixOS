@@ -3,6 +3,9 @@
 
 
 {
+imports = [
+./waydroid.nix
+];
 
 
   # Основной стек виртуализации: libvirt + QEMU/KVM.
