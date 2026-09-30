@@ -1,18 +1,29 @@
-{ ... }:
+{ config, lib, ... }:
 
 {
-  # ─────────────────────────────────────────────
-  # DOLPHIN — CREATE NEW → NIX FILE
-  # ─────────────────────────────────────────────
-
   xdg.dataFile."templates/NixFile.desktop".text = ''
     [Desktop Entry]
     Type=Link
     Name=Nix File
-    Comment=Имя Nix-файла:
+    Comment=Создать Nix-файл
     Icon=text-x-nix
     URL=.source/empty.nix
   '';
 
-  xdg.dataFile."templates/.source/empty.nix".text = "";
+  home.activation.createNixTemplate =
+    lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+      templateDir="${config.xdg.dataHome}/templates/.source"
+
+      mkdir -p "$templateDir"
+
+      # Удаляем старую HM-ссылку в /nix/store, если осталась.
+      if [ -L "$templateDir/empty.nix" ]; then
+        rm "$templateDir/empty.nix"
+      fi
+
+      # Создаём настоящий обычный файл.
+      if [ ! -e "$templateDir/empty.nix" ]; then
+        touch "$templateDir/empty.nix"
+      fi
+    '';
 }
