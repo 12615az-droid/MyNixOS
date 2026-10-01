@@ -20,7 +20,7 @@
 
 
 
-      watchnvidia = "watch -n 1 nvidia-smi";
+      wsensors = "watch -n 1 sensors";
 
 
 
