@@ -1,7 +1,0 @@
-# modules/system/ssh.nix
-
-{ ... }:
-
-{
-
-}

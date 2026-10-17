@@ -12,7 +12,6 @@
     ./git.nix
     ./kde-preset
     ./mangohud.nix
-    ./monitors.nix
     ./packages.nix
     ./shell.nix
     ./ssh.nix

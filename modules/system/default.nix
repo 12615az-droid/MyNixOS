@@ -8,6 +8,5 @@
     ./nix-settings.nix
     ./swap.nix
     ./ssh.nix
-    ./vpn.nix
   ];
 }

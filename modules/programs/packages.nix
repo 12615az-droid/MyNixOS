@@ -15,14 +15,11 @@ services.lact.enable = true;
 hardware.amdgpu.overdrive.enable = true;
 programs.coolercontrol.enable = true;
 
-  services.printing.enable = true;
+
   services.flatpak.enable = true;
 
 
-  services.hardware.openrgb = {
-  enable = true;
-  motherboard = "amd";
-};
+
 
   environment.systemPackages = with pkgs; [
     curl
@@ -44,5 +41,7 @@ programs.coolercontrol.enable = true;
     smartmontools
 
     lm_sensors
+
+    cisco-packet-tracer_9
   ];
 }
