@@ -1,0 +1,116 @@
+{
+  "bar": {
+    "barType": "floating",
+    "position": "top",
+    "density": "comfortable",
+    "displayMode": "always_visible",
+    "backgroundOpacity": 1,
+    "useSeparateOpacity": true,
+    "showCapsule": true,
+    "capsuleOpacity": 1,
+    "capsuleColorKey": "surfaceVariant",
+    "showOutline": true,
+    "marginHorizontal": 12,
+    "marginVertical": 4,
+    "widgetSpacing": 6,
+    "contentPadding": 2,
+    "frameRadius": 12,
+    "enableExclusionZoneInset": true,
+    "rightClickAction": "controlCenter",
+    "widgets": {
+      "left": [
+        { "id": "Launcher", "useDistroLogo": true, "enableColorization": true, "iconColor": "primary" },
+        { "id": "Clock", "formatHorizontal": "HH:mm", "tooltipFormat": "dddd, dd MMMM yyyy", "clockColor": "secondary" },
+        { "id": "SystemMonitor", "compactMode": true, "showCpuUsage": true, "showMemoryUsage": true, "showMemoryAsPercent": true, "showCpuTemp": false, "showDiskUsage": false, "showLoadAverage": false, "iconColor": "primary", "textColor": "none" },
+        { "id": "ActiveWindow", "showIcon": true, "showText": false, "maxWidth": 145 },
+        { "id": "MediaMini", "hideWhenIdle": true, "maxWidth": 160, "showAlbumArt": true, "showVisualizer": true, "textColor": "secondary" },
+        { "id": "AudioVisualizer", "hideWhenIdle": true, "width": 80, "colorName": "secondary" }
+      ],
+      "center": [
+        { "id": "Workspace", "labelMode": "index", "hideUnoccupied": false, "showApplications": false, "showBadge": true, "focusedColor": "primary", "occupiedColor": "secondary", "emptyColor": "tertiary", "enableScrollWheel": true, "fontWeight": "bold", "pillSize": 0.6 }
+      ],
+      "right": [
+        { "id": "Tray" },
+        { "id": "KeyboardLayout", "showIcon": false, "textColor": "secondary" },
+        { "id": "WallpaperSelector", "iconColor": "tertiary" },
+        { "id": "NotificationHistory", "iconColor": "tertiary" },
+        { "id": "Volume", "displayMode": "onhover", "iconColor": "secondary" },
+        { "id": "ControlCenter", "icon": "settings", "useDistroLogo": false, "iconColor": "primary" },
+        { "id": "SessionMenu", "iconColor": "tertiary" }
+      ]
+    }
+  },
+  "general": {
+    "language": "ru",
+    "scaleRatio": 1,
+    "radiusRatio": 0.83,
+    "enableBlurBehind": false,
+    "enableShadows": true,
+    "showScreenCorners": false,
+    "dimmerOpacity": 0,
+    "showChangelogOnStartup": false,
+    "telemetryEnabled": false,
+    "autoStartAuth": false,
+    "lockOnSuspend": false
+  },
+  "ui": {
+    "fontDefault": "Inter",
+    "fontFixed": "JetBrainsMono Nerd Font",
+    "panelBackgroundOpacity": 1,
+    "translucentWidgets": false,
+    "panelsAttachedToBar": false,
+    "settingsPanelMode": "window",
+    "settingsPanelSideBarCardStyle": true,
+    "boxBorderEnabled": true
+  },
+  "colorSchemes": {
+    "predefinedScheme": "Nix-Aurora",
+    "darkMode": true,
+    "useWallpaperColors": false,
+    "schedulingMode": "off",
+    "syncGsettings": false
+  },
+  "appLauncher": {
+    "position": "center",
+    "viewMode": "list",
+    "showCategories": true,
+    "sortByMostUsed": true,
+    "enableClipboardHistory": false,
+    "pinnedApps": ["firefox", "thunar", "kitty", "dev.zed.Zed", "steam", "com.obsproject.Studio"],
+    "enableSettingsSearch": true,
+    "enableWindowsSearch": true,
+    "enableSessionSearch": true
+  },
+  "controlCenter": {
+    "position": "close_to_bar_button",
+    "shortcuts": {
+      "left": [{"id":"Network"}, {"id":"Bluetooth"}, {"id":"WallpaperSelector"}],
+      "right": [{"id":"Notifications"}, {"id":"KeepAwake"}]
+    },
+    "cards": [
+      {"id":"profile-card","enabled":true},
+      {"id":"shortcuts-card","enabled":true},
+      {"id":"audio-card","enabled":true},
+      {"id":"media-sysmon-card","enabled":true}
+    ]
+  },
+  "dock": { "enabled": false, "backgroundOpacity": 1 },
+  "notifications": { "enabled": true, "location": "top_right", "backgroundOpacity": 1, "normalUrgencyDuration": 6 },
+  "osd": { "enabled": true, "backgroundOpacity": 1, "location": "top_right" },
+  "wallpaper": {
+    "enabled": true,
+    "automationEnabled": false,
+    "setWallpaperOnAllMonitors": true,
+    "useWallhaven": false,
+    "overviewEnabled": false,
+    "skipStartupTransition": true,
+    "transitionType": ["fade"],
+    "transitionDuration": 500,
+    "fillMode": "crop"
+  },
+  "location": { "weatherEnabled": false, "autoLocate": false, "showCalendarWeather": false, "showCalendarEvents": false, "use12hourFormat": false, "firstDayOfWeek": 1 },
+  "sessionMenu": { "enableCountdown": true, "countdownDuration": 10000, "position": "center", "largeButtonsStyle": true },
+  "idle": { "enabled": false },
+  "templates": { "activeTemplates": [], "enableUserTheming": false },
+  "plugins": { "autoUpdate": false, "notifyUpdates": false }
+}

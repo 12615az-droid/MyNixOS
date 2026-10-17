@@ -17,8 +17,8 @@ cursor {
     xcursor-size 24
 }
 layout {
-    gaps 16
-    center-focused-column "on-overflow"
+    gaps 12
+    center-focused-column "never"
     preset-column-widths {
         proportion 0.33333
         proportion 0.5
@@ -31,7 +31,11 @@ layout {
         active-gradient from="#@blue@" to="#@mint@" angle=45
         inactive-color "#@border@"
     }
-    border { off; }
+    border {
+        width 1
+        active-color "#@purple@"
+        inactive-color "#@border@"
+    }
     shadow {
         on
         softness 28
@@ -48,7 +52,8 @@ workspace "work"
 workspace "chat"
 workspace "games"
 window-rule {
-    geometry-corner-radius 14
+    geometry-corner-radius 12
+    opacity 1.0
     clip-to-geometry true
 }
 window-rule {
@@ -64,13 +69,13 @@ window-rule {
     open-on-workspace "chat"
 }
 binds {
-    Mod+Return hotkey-overlay-title="Терминал" { spawn "foot"; }
-    Mod+T { spawn "foot"; }
-    Mod+D hotkey-overlay-title="Приложения" { spawn "fuzzel"; }
+    Mod+Return hotkey-overlay-title="Терминал" { spawn "kitty"; }
+    Mod+T { spawn "kitty"; }
+    Mod+D hotkey-overlay-title="Приложения" { spawn "noctalia-shell" "ipc" "call" "launcher" "toggle"; }
     Mod+E hotkey-overlay-title="Файлы" { spawn "thunar"; }
     Mod+B { spawn "firefox"; }
     Mod+L hotkey-overlay-title="Блокировка" { spawn "swaylock" "-f"; }
-    Mod+Shift+E hotkey-overlay-title="Питание и выход" { spawn "niri-power-menu"; }
+    Mod+Shift+E hotkey-overlay-title="Питание и выход" { spawn "noctalia-shell" "ipc" "call" "sessionMenu" "toggle"; }
     Mod+Shift+Slash { show-hotkey-overlay; }
     Mod+O repeat=false { toggle-overview; }
     Mod+Tab { focus-workspace-previous; }
@@ -111,7 +116,10 @@ binds {
     Mod+BracketRight { consume-or-expel-window-right; }
     Mod+Minus { set-column-width "-10%"; }
     Mod+Equal { set-column-width "+10%"; }
-    Mod+N { spawn "makoctl" "dismiss"; }
+    Mod+X hotkey-overlay-title="Обои" { spawn "noctalia-shell" "ipc" "call" "wallpaper" "toggle"; }
+    Mod+S hotkey-overlay-title="Центр управления" { spawn "noctalia-shell" "ipc" "call" "controlCenter" "toggle"; }
+    Mod+Shift+S { screenshot; }
+    Mod+N { spawn "noctalia-shell" "ipc" "call" "notifications" "toggleHistory"; }
     Print { screenshot; }
     Ctrl+Print { screenshot-screen; }
     Alt+Print { screenshot-window; }
