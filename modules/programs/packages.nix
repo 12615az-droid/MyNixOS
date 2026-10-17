@@ -35,10 +35,9 @@ programs.coolercontrol.enable = true;
 
     adwaita-icon-theme
  
-    kdePackages.ksystemstats
 
 
-    kdePackages.partitionmanager
+    gparted
     ntfs3g
     parted
     smartmontools
@@ -46,3 +45,4 @@ programs.coolercontrol.enable = true;
     lm_sensors
   ];
 }
+

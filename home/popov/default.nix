@@ -3,14 +3,13 @@
 {
   imports = [
     ./adGuardVpn.nix
-    ./baloo.nix
     ./btop.nix
     ./development.nix
     ./fastfetch.nix
     ./function.nix
     ./gaming.nix
     ./git.nix
-    ./kde-preset
+    ./niri
     ./mangohud.nix
     ./monitors.nix
     ./packages.nix
@@ -27,3 +26,4 @@
 
   programs.home-manager.enable = true;
 }
+

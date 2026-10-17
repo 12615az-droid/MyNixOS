@@ -2,10 +2,6 @@
 
 {
   home.packages = with pkgs; [
-    # KDE / GUI
-    kdePackages.kate
-    kdePackages.spectacle
-
     # Связь
     ayugram-desktop
     discord
@@ -23,7 +19,7 @@
     alsa-utils
 nvtopPackages.full
     # Офис
-    libreoffice-qt
+    libreoffice
 
     # Пользовательские утилиты
     htop
@@ -48,3 +44,4 @@ nvtopPackages.full
     fzf
   ];
 }
+

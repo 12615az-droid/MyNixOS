@@ -1,388 +1,73 @@
-<div align="center">
+# MyNixOS · Niri / Nix Aurora
 
-<h1>❄️ MyNixOS</h1>
+The `niri` branch replaces Plasma with a scrollable Niri Wayland desktop on
+NixOS 26.05 and Home Manager. The dark theme combines NixOS blue, mint and
+purple, rounded windows, a gradient focus ring and custom 4K wallpaper.
 
-<p>My personal modular NixOS configuration</p>
+[Полная инструкция на русском](README.md)
 
-<a href="https://nixos.org/"><img src="https://img.shields.io/badge/NixOS-26.05-5277C3?logo=nixos&logoColor=white" alt="NixOS"></a>
-<a href="https://kde.org/plasma-desktop/"><img src="https://img.shields.io/badge/KDE-Plasma%206-1D99F3?logo=kde&logoColor=white" alt="KDE Plasma"></a>
-<a href="https://github.com/nix-community/home-manager"><img src="https://img.shields.io/badge/Home%20Manager-enabled-7EBAE4" alt="Home Manager"></a>
-<a href="https://nixos.wiki/wiki/Flakes"><img src="https://img.shields.io/badge/Nix-Flakes-5277C3?logo=nixos&logoColor=white" alt="Flakes"></a>
-<img src="https://img.shields.io/badge/arch-x86__64-lightgrey" alt="Architecture">
+## Desktop
 
-</div>
+- greetd + tuigreet login starts `niri-session` with systemd session integration.
+- Waybar provides workspaces, clock, CPU/RAM, audio, network, Bluetooth, keyboard layout and tray.
+- Fuzzel launcher and power menu; shutdown and reboot require confirmation.
+- Foot terminal; Thunar and Xarchiver; Mousepad, Ristretto and Evince.
+- Mako notifications, Swaylock after 5 minutes, monitor power-off after 10 minutes.
+- Adwaita-dark with custom accents, Papirus icons, Bibata Modern Ice cursor.
+- xwayland-satellite for X11 apps; GNOME screencast portal and GTK file chooser.
 
----
+Plasma, SDDM, plasma-manager, KDE Connect, Baloo and the old KDE preset are
+removed, along with explicitly installed KDE apps. GParted replaces Partition
+Manager and LibreOffice uses the GTK variant. Independent Qt applications,
+games, development tools, hardware configuration, SSH, VPN and virtualization
+are preserved. Existing KDE files in the user's home directory are not deleted.
+Some retained applications may still depend on KDE/Qt libraries in the Nix store.
 
-## 🖥️ System
+## Install on the configured machine
 
-| Component | Configuration |
-| --- | --- |
-| OS | NixOS 26.05 |
-| Architecture | `x86_64-linux` |
-| Desktop | KDE Plasma 6 |
-| Display Manager | SDDM |
-| User config | Home Manager |
-| Plasma config | Plasma Manager |
-| Bootloader | systemd-boot |
-| Network | NetworkManager |
-| Audio | PipeWire |
-| GPU | Intel UHD 730 + NVIDIA GTX 1060 |
-| Virtualization | QEMU/KVM + libvirt |
+This configuration contains machine-specific disks and user settings.
+Check `hosts/nixos/hardware-configuration.nix` before using another machine.
 
-Main Flake configuration:
+From an existing clean clone:
 
-`nixosConfigurations.nixos`
-
----
-
-## 🎨 KDE Plasma
-
-Plasma settings are separated from the system configuration:
-
-`home/popov/kde-preset/`
-
-| Module | Purpose |
-| --- | --- |
-| `appearance.nix` | Breeze, colors and wallpaper |
-| `theme.nix` | shared theme values |
-| `panel.nix` | bottom panel |
-| `shortcuts.nix` | keyboard shortcuts |
-| `lockscreen.nix` | lock screen |
-| `power.nix` | power and idle behavior |
-| `file-icons.nix` | MIME and custom icons |
-| `icons/` | custom SVG files |
-
-### Appearance
-
-| Setting | Value |
-| --- | --- |
-| Look & Feel | Breeze |
-| Color Scheme | Breeze Light |
-| Icons | Breeze |
-| Wallpaper | Scarlet Tree |
-| Accent | 🟣 `#6D28D9` |
-
-### Panel
-
-| Setting | Value |
-| --- | --- |
-| Position | Bottom |
-| Length | Full width |
-| Floating | Disabled |
-| Visibility | Auto Hide |
-| Launcher | KDE Kickoff |
-| System Tray | Enabled |
-| Clock | Enabled |
-
-Pinned applications include:
-
-`Dolphin` · `Konsole` · `Firefox` · `VS Code` · `Discord` · `Steam` · `System Settings` · `Virt-Manager` · `KDE Connect` · `Android Studio` · `Heroic` · `AyuGram`
-
----
-
-## ⌨️ Keyboard shortcuts
-
-| Shortcut | Action |
-| --- | --- |
-| `Meta` | 🚀 Application Launcher |
-| `Meta + Enter` | 💻 Launch Konsole |
-| `Meta + Q` | ❌ Close active window |
-| `Meta + W` | 🪟 KDE Overview |
-| `Meta + ,` | 🔎 Show open windows |
-
----
-
-## ❄️ Custom `.nix` icon
-
-Nix files use their own MIME type and custom Breeze-style SVG icon.
-
-```text
-*.nix
-   │
-   ▼
-text/x-nix
-   │
-   ▼
-text-x-nix.svg
+```bash
+cd ~/MyNixOS
+git fetch origin
+git switch --track origin/niri
+nix flake check
+sudo nixos-rebuild build --flake .#nixos
+sudo nixos-rebuild boot --flake .#nixos
+sudo reboot
 ```
 
-This makes Nix files immediately distinguishable from normal text files in Dolphin.
-
----
-
-## 🎮 Gaming
-
-| Component | Purpose |
-| --- | --- |
-| Steam | Main game client |
-| GameMode | Runtime game optimizations |
-| Heroic | Epic / GOG launcher |
-| Legendary | Epic CLI |
-| ProtonUp-Qt | Proton management |
-| Gamescope | Gaming compositor |
-| Lutris | Additional game launcher |
-| MangoHud | Performance overlay |
-
-### MangoHud
-
-Two MangoHud profiles are configured.
-
-| Profile | Command | Purpose |
-| --- | --- | --- |
-| 🟢 Lite | `mangohud-lite` | Compact gaming HUD |
-| 🔵 Full | `mangohud-full` | Detailed diagnostics |
-
-### Lite
-
-Includes:
-
-- FPS
-- frametime
-- GPU load / temperature / power
-- VRAM
-- CPU load / temperature / power
-- RAM
-- GameMode
-- Present Mode
-
-### Full
-
-Includes detailed:
-
-- FPS metrics
-- frametime
-- GPU load
-- clocks
-- temperature
-- power
-- VRAM
-- CPU stats
-- per-core load
-- RAM and swap
-- process memory
-- disk I/O
-- Wine
-- GameMode
-- Present Mode
-- Display Server
-- Resolution
-- graphics stack information
-
----
-
-## 🖥️ Hardware
-
-| Component | Hardware |
-| --- | --- |
-| iGPU | Intel UHD 730 |
-| dGPU | NVIDIA GeForce GTX 1060 |
-| Driver | NVIDIA proprietary |
-| Vulkan | Enabled |
-| 32-bit graphics | Enabled |
-
-NVIDIA configuration:
-
-`hosts/nixos/hardware/nvidia.nix`
-
----
-
-## 🖥️ Virtualization
-
-| Component | Enabled |
-| --- | --- |
-| KVM | ✅ |
-| QEMU | ✅ |
-| libvirt | ✅ |
-| Virt-Manager | ✅ |
-| Virt-Viewer | ✅ |
-| swtpm | ✅ |
-| SPICE | ✅ |
-| USB Redirection | ✅ |
-
-Default connection:
-
-`qemu:///system`
-
----
-
-## 🛠️ Development
-
-| Category | Tools |
-| --- | --- |
-| C / C++ | GCC, Make, CMake, GDB |
-| Python | Python 3, pip, virtualenv |
-| Android | Android Studio, ADB |
-| JVM | JDK 17, Kotlin, Gradle |
-| Editor | VS Code |
-
-### 📱 adb-qr
-
-A local Nix package definition is included for the third-party project:
-
-[aleixrodriala/adb-qr](https://github.com/aleixrodriala/adb-qr)
-
-`packages/adb-qr/`
-
-«`adb-qr` is not my project.»
-
-The local derivation is used because the application is not available as a package in the Nixpkgs version used by this configuration.
-
----
-
-## ⚡ Fastfetch
-
-Fastfetch has a small custom configuration:
-
-`home/popov/fastfetch.nix`
-
-Its output is divided into three sections:
-
-```text
-──────────── USER ─────────────
-───────────── OS ──────────────
-────────── HARDWARE ───────────
-```
-
-It includes:
-
-- user
-- GitHub profile
-- OS
-- kernel
-- uptime
-- package count
-- desktop/session
-- host
-- monitors
-- CPU
-- GPU
-- memory
-- disks
-
-Colors, separators and output formatting are customized as well.
-
----
-
-## 🐚 Bash aliases
-
-| Alias | Action |
-| --- | --- |
-| `ll` | `ls -lah` |
-| `sbtop` | run btop as root |
-| `rebuild` | rebuild and switch |
-| `nbuild` | build only |
-| `ntest` | test configuration |
-| `nupdate` | update Flake and rebuild |
-| `nclean` | delete old Nix generations |
-| `watchnvidia` | refresh `nvidia-smi` every second |
-| `grep` | colored grep output |
-
-Also available:
-
-`rebuildVPN <server> <ip>`
-
-for remote VPN-server rebuilds over SSH.
-
----
-
-## 📁 Repository structure
-
-<details>
-<summary><b>Show repository tree</b></summary>
-
-```text
-├── configuration.nix
-├── flake.lock
-├── flake.nix
-├── home/
-│   ├── default.nix
-│   └── popov/
-│       ├── development.nix
-│       ├── fastfetch.nix
-│       ├── gaming.nix
-│       ├── git.nix
-│       ├── kde-preset/
-│       │   ├── appearance.nix
-│       │   ├── default.nix
-│       │   ├── file-icons.nix
-│       │   ├── icons/
-│       │   ├── lockscreen.nix
-│       │   ├── panel.nix
-│       │   ├── power.nix
-│       │   ├── shortcuts.nix
-│       │   └── theme.nix
-│       ├── mangohud.nix
-│       ├── monitors.nix
-│       ├── packages.nix
-│       └── shell.nix
-├── hosts/
-├── modules/
-├── packages/
-├── README.md
-└── README.en.md
-```
-
-</details>
-
-| Directory | Purpose |
-| --- | --- |
-| `hosts/` | machine-specific configuration |
-| `modules/` | system-wide NixOS modules |
-| `home/` | Home Manager user configuration |
-| `packages/` | local Nix package definitions |
-
----
-
-## 🚀 Build
-
-| Action | Command |
-| --- | --- |
-| Build | `nbuild` |
-| Test | `ntest` |
-| Apply | `rebuild` |
-| Update | `nupdate` |
-| Clean | `nclean` |
-
-Direct NixOS command:
-
-`sudo nixos-rebuild switch --flake .#nixos`
-
----
-
-## Git + Flakes
-
-New files must be visible to Git:
-
-`git add path/to/file`
-
-Otherwise Nix may report:
-
-`Path '...' does not exist in Git repository`
-
-A commit is not required for a local build.
-
----
-
-## ⚠️ Using this configuration on another machine
-
-This configuration is hardware-specific.
-
-Review at least:
-
-| File | Purpose |
-| --- | --- |
-| `hardware-configuration.nix` | hardware and filesystems |
-| `hardware/nvidia.nix` | GPU configuration |
-| `hardware/disks.nix` | disks |
-| `hardware/bootloader.nix` | boot configuration |
-| `users/default.nix` | user configuration |
-| `locale.nix` | locale and timezone |
-| `swap.nix` | swap / zram |
-| `monitors.nix` | displays |
-| `git.nix` | Git identity |
-
-The username and home directory also need to be changed:
-
-popov
-`/home/popov`
+Use `git switch niri` if the local branch already exists. Using `boot` avoids
+replacing the running desktop mid-session. Log in with your existing username
+and password. Keep older generations until the desktop has been tested; select
+an older generation in the bootloader if needed.
+
+The flake check validates the generated Home Manager KDL with the pinned Niri.
+A full Nix build and live graphical session were **not** tested in the editing
+environment because Nix was unavailable. Changed Nix files were checked
+statically, imports and removals inspected, and module options compared with
+the pinned upstream sources.
+
+## Shortcuts and customization
+
+Super+Enter: terminal; Super+D: launcher; Super+E: files; Super+B: browser;
+Super+L: lock; Super+Shift+E: power menu; Super+O: overview;
+Super+1–4: named workspaces; Super+arrows: focus; Super+Ctrl+arrows: move;
+Super+F: maximize column; Super+Shift+F: fullscreen; Super+V: floating;
+Print: screenshot; Alt+Shift: RU/EN; Super+Shift+/: shortcut overlay.
+
+Screenshots are saved in `~/Pictures/Screenshots`. Displays use automatic modes;
+inspect names with `niri msg outputs` before adding explicit output settings.
+
+Desktop files live in `home/popov/niri/`: `palette.nix` controls UI colours,
+`config.kdl` controls windows and shortcuts, `waybar.nix` controls the panel,
+`default.nix` configures apps and services, and `wallpaper.svg` is the wallpaper
+source with its own gradient colours. System integration is in
+`modules/desktop/niri.nix`.
+
+See [Niri documentation](https://niri-wm.github.io/niri/) and
+[Waybar documentation](https://github.com/Alexays/Waybar/wiki).
+The existing adb-qr package comes from [aleixrodriala/adb-qr](https://github.com/aleixrodriala/adb-qr).
