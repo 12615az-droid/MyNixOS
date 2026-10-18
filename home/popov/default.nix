@@ -17,6 +17,7 @@
     ./ssh.nix
    ./Bottom.nix
    ./zed.nix
+   ./firefox.nix
 
   ];
 

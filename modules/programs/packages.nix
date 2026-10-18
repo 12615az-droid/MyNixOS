@@ -1,15 +1,7 @@
 { pkgs, ... }:
 
 {
-programs.firefox = {
-  enable = true;
 
-  languagePacks = [ "ru" ];
-
-  preferences = {
-    "intl.locale.requested" = "ru";
-  };
-};
 
 services.lact.enable = true;
 hardware.amdgpu.overdrive.enable = true;

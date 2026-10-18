@@ -1,4 +1,4 @@
-   {
+{
   description = "NixOS configuration";
 
   inputs = {
@@ -14,26 +14,28 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.home-manager.follows = "home-manager";
     };
-
   };
 
   outputs = { self, nixpkgs, home-manager, plasma-manager, ... }: {
     nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
 
-     modules = [
-  ./configuration.nix
+      modules = [
+        ./configuration.nix
 
+        home-manager.nixosModules.home-manager
 
-  home-manager.nixosModules.home-manager
+        {
+          home-manager = {
+            # Сохранять конфликтующие файлы
+            backupFileExtension = "hm-backup";
 
-  {
-
-    home-manager.sharedModules = [
-      plasma-manager.homeModules.plasma-manager
-    ];
-  }
-];
+            sharedModules = [
+              plasma-manager.homeModules.plasma-manager
+            ];
+          };
+        }
+      ];
     };
   };
 }

@@ -5,12 +5,13 @@ let
 in
 {
   home.packages = with pkgs; [
-    vscode
     android-studio
 
     jdk17
     kotlin
     gradle
+
+    codex
 
     androidenv.androidPkgs.platform-tools
 

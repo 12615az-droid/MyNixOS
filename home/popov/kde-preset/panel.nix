@@ -35,7 +35,6 @@
               "applications:org.kde.konsole.desktop"
 
               "applications:firefox.desktop"
-              "applications:code.desktop"
               "applications:discord.desktop"
               "applications:steam.desktop"
 
@@ -50,6 +49,8 @@
 
               # Android Studio
               "applications:android-studio.desktop"
+
+              "applications:dev.zed.Zed.desktop"
 
               # Heroic Games Launcher
               "applications:com.heroicgameslauncher.hgl.desktop"

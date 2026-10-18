@@ -8,5 +8,6 @@
     ./disks.nix
     ./bootloader.nix
     ./nonrgb.nix
+    ./cpu-monitoring.nix
   ];
 }
