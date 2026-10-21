@@ -6,5 +6,6 @@
     ./audio.nix
     ./bluetooth.nix
     ./printer.nix
+    ./graphics.nix
   ];
 }

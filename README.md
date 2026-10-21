@@ -2,640 +2,265 @@
 
 # ❄️ MyNixOS
 
-Моя персональная модульная конфигурация NixOS для основного ПК.
+**Персональная модульная конфигурация NixOS для основного ПК**
+
+[English version](README.en.md)
 
 [![NixOS](https://img.shields.io/badge/NixOS-26.05-5277C3?logo=nixos&logoColor=white)](https://nixos.org/)
 [![KDE Plasma](https://img.shields.io/badge/KDE-Plasma%206-1D99F3?logo=kde&logoColor=white)](https://kde.org/plasma-desktop/)
 [![Home Manager](https://img.shields.io/badge/Home%20Manager-enabled-7EBAE4)](https://github.com/nix-community/home-manager)
-[![Flakes](https://img.shields.io/badge/Nix-Flakes-5277C3?logo=nixos&logoColor=white)](https://nixos.wiki/wiki/Flakes)
-![Architecture](https://img.shields.io/badge/arch-x86__64-lightgrey)
-![CPU](https://img.shields.io/badge/CPU-Ryzen%207%209700X-EF0707?logo=amd&logoColor=white)
-![GPU](https://img.shields.io/badge/GPU-Radeon%20RX%205700%20XT-EF0707?logo=amd&logoColor=white)
+[![Flakes](https://img.shields.io/badge/Nix-Flakes-5277C3?logo=nixos&logoColor=white)](https://wiki.nixos.org/wiki/Flakes)
+![Architecture](https://img.shields.io/badge/arch-x86__64--linux-lightgrey)
 
 </div>
 
----
+> [!IMPORTANT]
+> Это конфигурация конкретного компьютера, а не универсальный установщик. Перед применением на другой машине обязательно замените UUID дисков, имя пользователя, домашний каталог, SSH-ключ и аппаратные настройки.
 
-## 🖥️ Система
+## Обзор
 
-| Компонент | Конфигурация |
+Flake описывает один хост — `nixos` — и объединяет системные модули NixOS, пользовательскую конфигурацию Home Manager и настройки Plasma Manager.
+
+| Компонент | Настройка |
 | --- | --- |
-| OS | NixOS 26.05 |
+| Канал | NixOS / Home Manager `26.05` |
 | Архитектура | `x86_64-linux` |
-| Desktop | KDE Plasma 6 |
-| Session | KWin / Wayland |
-| Display Manager | SDDM |
-| User config | Home Manager |
-| Plasma config | Plasma Manager |
-| Bootloader | systemd-boot |
-| Network | NetworkManager |
-| Audio | PipeWire |
-| CPU | AMD Ryzen 7 9700X |
-| GPU | AMD Radeon RX 5700 XT + AMD Radeon Graphics |
-| Graphics stack | `amdgpu` + Mesa |
-| RAM | 32 GiB |
-| Virtualization | QEMU/KVM + libvirt |
-| Android container | Waydroid |
+| Хост | `nixos` |
+| Пользователь | `popov` (UID 1000) |
+| Рабочий стол | KDE Plasma 6, SDDM |
+| Графика | AMDGPU, Mesa, Vulkan и 32-битный графический стек |
+| Сеть | NetworkManager, Tailscale |
+| Звук | PipeWire + ALSA/PulseAudio compatibility |
+| Загрузка | UEFI, systemd-boot, Plymouth |
+| Файловая система | Btrfs для `/`, `/home` и `/nix`; отдельный ext4 HDD |
+| Виртуализация | KVM/QEMU, libvirt, virt-manager, SPICE, swtpm, virtiofsd |
+| Android | Waydroid с nftables |
+| Игры | Steam, GameMode, Gamescope, Lutris, Heroic, MangoHud |
 
-Основная Flake-конфигурация:
+Главный выход flake:
 
 ```text
 nixosConfigurations.nixos
 ```
 
-Входная точка системы:
+Поток импорта:
 
 ```text
-configuration.nix
-├── hosts/nixos
-├── modules
-└── home
+flake.nix
+└── configuration.nix
+    ├── hosts/nixos       # хост и конкретное оборудование
+    ├── modules           # переиспользуемые системные возможности
+    └── home              # Home Manager для popov
 ```
 
----
-
-## 🧠 Hardware
-
-### CPU
-
-| Параметр | Значение |
-| --- | --- |
-| CPU | AMD Ryzen 7 9700X |
-| Архитектура | Zen 5 / AM5 |
-| Ядра / потоки | 8 / 16 |
-| Аппаратная виртуализация | AMD-V / KVM |
-| Kernel module | `kvm-amd` |
-
-### Graphics
-
-| Компонент | Модель |
-| --- | --- |
-| dGPU | AMD Radeon RX 5700 XT |
-| iGPU | AMD Radeon Graphics |
-| Kernel driver | `amdgpu` |
-| Userspace | Mesa |
-| Vulkan | Enabled |
-| 32-bit graphics | Enabled |
-
-GPU-конфигурация:
+## Структура репозитория
 
 ```text
-hosts/nixos/hardware/amdgpu.nix
-modules/desktop/graphics.nix
-```
-
-Вся старая конфигурация NVIDIA больше не используется.
-
-### Monitors
-
-Текущая конфигурация — два Full HD монитора:
-
-```text
-1920×1080 @ ~75 Hz
-1920×1080 @ ~60 Hz
-```
-
-Пользовательские настройки мониторов находятся в:
-
-```text
-home/popov/monitors.nix
-```
-
-### Storage
-
-Системный SSD:
-
-```text
-/
-├── Btrfs
-├── /home → Btrfs subvolume
-└── /nix  → Btrfs subvolume
-```
-
-Дополнительный диск:
-
-```text
-/home/popov/Drives/HDD1
-└── ext4, 2 TB
-```
-
-HDD монтируется декларативно через systemd automount.
-
-Конфигурация:
-
-```text
-hosts/nixos/hardware-configuration.nix
-hosts/nixos/hardware/disks.nix
-```
-
-### OpenRGB
-
-OpenRGB включён как системный сервис с профилем для AMD-платформы.
-
-```text
-hosts/nixos/hardware/nonrgb.nix
-```
-
----
-
-## 🎨 KDE Plasma
-
-Настройки Plasma вынесены в отдельные Home Manager / Plasma Manager модули:
-
-```text
-home/popov/kde-preset/
-```
-
-| Модуль | Назначение |
-| --- | --- |
-| `appearance.nix` | внешний вид, цвета и обои |
-| `theme.nix` | общие параметры темы |
-| `panel.nix` | нижняя панель Plasma |
-| `shortcuts.nix` | горячие клавиши |
-| `lockscreen.nix` | экран блокировки |
-| `power.nix` | питание и idle |
-| `keyboard.nix` | параметры клавиатуры |
-| `file-icons.nix` | MIME и кастомные иконки |
-| `file-templates.nix` | шаблон создания `.nix`-файлов |
-| `icons/` | пользовательские SVG |
-
-### Внешний вид
-
-| Параметр | Значение |
-| --- | --- |
-| Look & Feel | Breeze |
-| Color Scheme | Breeze Light |
-| Icons | Breeze |
-| Wallpaper | Scarlet Tree |
-| Accent | 🟣 `#6D28D9` |
-
-### Панель
-
-Нижняя панель Plasma:
-
-- расположена снизу;
-- растянута на всю ширину;
-- не floating;
-- автоматически скрывается;
-- используется на всех мониторах;
-- содержит Kickoff, Task Manager, System Tray, часы и Show Desktop.
-
-Закреплены основные приложения:
-
-`Dolphin` · `Konsole` · `Firefox` · `VS Code` · `Discord` · `Steam` · `System Settings` · `Virt-Manager` · `KDE Connect` · `Android Studio` · `Heroic` · `AyuGram`
-
----
-
-## ❄️ Интеграция Nix в Dolphin
-
-Для `.nix` настроен собственный MIME type и SVG-значок:
-
-```text
-*.nix
-   │
-   ▼
-text/x-nix
-   │
-   ▼
-text-x-nix.svg
-```
-
-Также в меню Dolphin **Создать** добавлен шаблон Nix-файла.
-
-Созданный файл является обычным файлом, а не symlink на `/nix/store`.
-
----
-
-## ⌨️ Горячие клавиши
-
-| Комбинация | Действие |
-| --- | --- |
-| `Meta` | открыть меню приложений |
-| `Meta + Enter` | запустить Konsole |
-| `Meta + Q` | закрыть активное окно |
-| `Meta + W` | KDE Overview |
-| `Meta + ,` | показать открытые окна |
-
----
-
-## 🔊 Audio
-
-Используется PipeWire:
-
-```text
-PipeWire
-├── ALSA
-├── ALSA 32-bit
-├── PulseAudio compatibility
-└── RTKit
-```
-
-Дополнительные инструменты:
-
-`pavucontrol` · `qpwgraph` · `alsa-utils`
-
-Конфигурация:
-
-```text
-modules/desktop/audio.nix
-```
-
----
-
-## 🎮 Gaming
-
-| Компонент | Назначение |
-| --- | --- |
-| Steam | основной игровой клиент |
-| GameMode | оптимизация системы во время игры |
-| Heroic | Epic / GOG |
-| Legendary | CLI для Epic |
-| ProtonUp-Qt | управление Proton |
-| Gamescope | игровой compositor |
-| Lutris | запуск сторонних игр |
-| MangoHud | игровой мониторинг |
-| Vulkan Tools | диагностика Vulkan |
-| Mesa Demos | диагностика Mesa/OpenGL |
-
-Системная часть:
-
-```text
-modules/programs/gaming.nix
-```
-
-Пользовательская часть:
-
-```text
-home/popov/gaming.nix
-home/popov/mangohud.nix
-```
-
-### MangoHud
-
-Используются два профиля:
-
-| Профиль | Команда | Назначение |
-| --- | --- | --- |
-| 🟢 Lite | `mangohud-lite` | компактный игровой HUD |
-| 🔵 Full | `mangohud-full` | подробная диагностика |
-
----
-
-## 🖥️ Virtualization
-
-Основной стек виртуализации:
-
-| Компонент | Статус |
-| --- | --- |
-| AMD-V / KVM | ✅ |
-| QEMU | ✅ |
-| libvirt | ✅ |
-| Virt-Manager | ✅ |
-| Virt-Viewer | ✅ |
-| swtpm | ✅ |
-| SPICE | ✅ |
-| USB Redirection | ✅ |
-| virtiofsd | ✅ |
-
-Основное подключение:
-
-```text
-qemu:///system
-```
-
-Каталоги:
-
-```text
-~/VMs
-~/VMs/images
-/home/popov/Drives/HDD1/VMs
-/home/popov/Drives/HDD1/VMs/iso
-```
-
-Конфигурация:
-
-```text
-modules/virtualization/default.nix
-```
-
-### Waydroid
-
-Waydroid используется для запуска Android-приложений непосредственно в Wayland-сессии.
-
-```text
-modules/virtualization/waydroid.nix
-```
-
----
-
-## 🛠️ Development
-
-| Категория | Инструменты |
-| --- | --- |
-| C / C++ | GCC, Make, CMake, GDB |
-| Python | Python 3, pip, virtualenv |
-| Android | Android Studio, ADB, scrcpy |
-| JVM | JDK 17, Kotlin, Gradle |
-| Editors | VS Code, Zed |
-| Secrets | agenix |
-
-Системный development stack:
-
-```text
-modules/programs/base-dev.nix
-```
-
-Пользовательская конфигурация:
-
-```text
-home/popov/development.nix
-```
-
-### 📱 adb-qr
-
-В репозитории находится локальный Nix derivation для стороннего проекта:
-
-```text
-packages/adb-qr/
-```
-
-Оригинальный проект: [aleixrodriala/adb-qr](https://github.com/aleixrodriala/adb-qr)
-
-`adb-qr` используется для Wireless ADB pairing через QR-код.
-
----
-
-## 📦 Applications
-
-| Категория | Программы |
-| --- | --- |
-| 🌐 Browser | Firefox |
-| 💻 Development | VS Code, Zed, Android Studio |
-| 💬 Communication | Discord, AyuGram |
-| 🎨 Graphics | Darktable, Inkscape |
-| 🎵 Multimedia | VLC, Strawberry |
-| 📄 Office | LibreOffice |
-| 📥 Torrents | qBittorrent |
-| 📱 Android | scrcpy, Waydroid |
-| 📊 Monitoring | btop, htop, nvtop, iotop |
-| 🌐 Network | nethogs, bandwhich, tcpdump |
-| 🛠️ Utilities | fzf, duf, tree, zip, unzip, p7zip |
-
----
-
-## ⚡ Fastfetch
-
-Fastfetch настроен через:
-
-```text
-home/popov/fastfetch.nix
-```
-
-Вывод разделён на три основных блока:
-
-```text
-──────────── USER ─────────────
-
-user@host
-GitHub : github.com/12615az-droid
-
-───────────── OS ──────────────
-
-OS
-Kernel
-Uptime
-Packages
-Desktop
-Session
-
-────────── HARDWARE ───────────
-
-Host
-Monitor
-CPU
-GPU
-Memory
-Disk
-```
-
-На текущем железе Fastfetch показывает Ryzen 7 9700X, Radeon RX 5700 XT, встроенную Radeon Graphics и два Full HD монитора.
-
----
-
-## 🐚 Bash
-
-Конфигурация:
-
-```text
-home/popov/shell.nix
-home/popov/function.nix
-```
-
-### Алиасы
-
-| Алиас | Действие |
-| --- | --- |
-| `ll` | `ls -lah` |
-| `sbtop` | запустить `btop` через sudo |
-| `rebuild` | применить текущую конфигурацию |
-| `nbuild` | собрать без переключения |
-| `ntest` | протестировать конфигурацию |
-| `nupdate` | обновить Flake и выполнить rebuild |
-| `nclean` | удалить старые поколения Nix |
-| `grep` | цветной вывод grep |
-
-Основные команды:
-
-```bash
-rebuild
-nbuild
-ntest
-nupdate
-nclean
-```
-
-### rebuildVPN
-
-Для удалённой сборки VPN-сервера определена функция:
-
-```bash
-rebuildVPN <server> <ip>
-```
-
----
-
-## 📁 Структура репозитория
-
-Упрощённая структура:
-
-```text
-MyNixOS/
-├── configuration.nix
-├── flake.nix
-├── flake.lock
-├── README.md
-├── README.en.md
-│
-├── hosts/
-│   └── nixos/
-│       ├── default.nix
-│       ├── hardware-configuration.nix
-│       └── hardware/
-│           ├── default.nix
-│           ├── amdgpu.nix
-│           ├── bootloader.nix
-│           ├── disks.nix
-│           └── nonrgb.nix
-│
+.
+├── flake.nix                         # входы и nixosConfigurations.nixos
+├── flake.lock                        # зафиксированные ревизии зависимостей
+├── configuration.nix                 # общая точка входа, stateVersion
+├── hosts/nixos/
+│   ├── default.nix                   # hostname и импорт hardware/
+│   ├── hardware-configuration.nix    # разделы, загрузочные модули, платформа
+│   └── hardware/                     # AMDGPU, bootloader, HDD, OpenRGB, датчики
 ├── modules/
-│   ├── default.nix
-│   ├── desktop/
-│   ├── programs/
-│   ├── system/
-│   ├── users/
-│   └── virtualization/
-│       ├── default.nix
-│       └── waydroid.nix
-│
-├── home/
-│   ├── default.nix
-│   └── popov/
-│       ├── default.nix
-│       ├── development.nix
-│       ├── fastfetch.nix
-│       ├── function.nix
-│       ├── gaming.nix
-│       ├── mangohud.nix
-│       ├── packages.nix
-│       ├── shell.nix
-│       └── kde-preset/
-│           ├── default.nix
-│           ├── appearance.nix
-│           ├── file-icons.nix
-│           ├── file-templates.nix
-│           ├── keyboard.nix
-│           ├── lockscreen.nix
-│           ├── panel.nix
-│           ├── power.nix
-│           ├── shortcuts.nix
-│           ├── theme.nix
-│           └── icons/
-│
-└── packages/
-    └── adb-qr/
+│   ├── system/                       # boot, locale, Nix, сеть, SSH, swap
+│   ├── desktop/                      # Plasma, SDDM, PipeWire, Bluetooth, печать
+│   ├── programs/                     # базовая разработка, Steam, OBS, пакеты
+│   ├── users/                        # пользователь popov и SSH-ключ
+│   └── virtualization/               # libvirt/QEMU и Waydroid
+├── home/popov/
+│   ├── default.nix                   # список пользовательских модулей
+│   ├── kde-preset/                   # Plasma Manager и интеграция Dolphin
+│   ├── wallpaper/                    # набор обоев
+│   └── *.nix                         # приложения, shell, Git, мониторинг и т. д.
+└── packages/adb-qr/default.nix       # локальный derivation adb-qr
 ```
 
-### Разделение
+## Системная конфигурация
 
-| Каталог | Назначение |
+### Загрузка и оборудование
+
+- systemd-boot хранит не более пяти поколений, запрещает редактирование записей и ждёт 3 секунды;
+- Plymouth и тихие параметры ядра сокращают вывод при старте;
+- загружается внешний модуль `nct6687` для аппаратного мониторинга, а `nct6683` блокируется;
+- для Wi-Fi-драйвера `rtw89_core` отключён энергосберегающий режим;
+- AMDGPU выбран как X.Org-драйвер, а Mesa включена и для 64-, и для 32-битных приложений;
+- включены LACT, AMDGPU overdrive и CoolerControl;
+- OpenRGB запускается системным сервисом с профилем `norm2.orp`.
+
+Системный накопитель использует один Btrfs-раздел для `/` и подтомов `/home` и `/nix`. EFI-раздел смонтирован в `/boot`. Дополнительный ext4 HDD монтируется по требованию в `/home/popov/Drives/HDD1` и отключается после 300 секунд простоя. UUID в конфигурации относятся только к исходному компьютеру.
+
+### Память и swap
+
+Настроены два уровня swap:
+
+- zram со сжатием Zstandard, размером до 100% RAM и приоритетом 100;
+- swap-файл `/var/lib/swapfile` размером 16 GiB и приоритетом 10.
+
+Также установлены `vm.swappiness = 100` и `vm.page-cluster = 0`.
+
+### Сеть и удалённый доступ
+
+NetworkManager управляет сетью, энергосбережение Wi-Fi отключено, Tailscale включён. UDP-порт 5353 открыт для mDNS.
+
+OpenSSH запускается как системный сервис и открывает порт в firewall. Вход разрешён только пользователю `popov`, только по ключу; root-вход, парольная и keyboard-interactive аутентификация отключены. Home Manager дополнительно создаёт клиентский alias `my-server`. Файл `adGuardVpn.nix` устанавливает `wireguard-tools`, `qrencode` и клиент OpenSSH, но сам VPN-туннель не создаёт.
+
+### Локаль и ввод
+
+- часовой пояс: `Europe/Minsk`;
+- системная локаль: `ru_RU.UTF-8`;
+- консольная раскладка: US;
+- в Plasma доступны US и RU с глобальной политикой переключения.
+
+В системном XKB задано `Alt+Shift`, а в Plasma Manager — `Meta+Space`. Если поведение раскладки окажется неоднозначным, оставьте один способ переключения.
+
+### Desktop и мультимедиа
+
+Plasma 6 работает через SDDM. Тема SDDM собирается из Breeze и использует те же обои, что и рабочий стол. KDE Connect и dconf включены.
+
+PipeWire предоставляет ALSA, 32-битную ALSA и совместимость с PulseAudio; RTKit выдаёт звуковым процессам приоритет реального времени. Пользовательский oneshot-сервис `fix-headphones` запускается вместе с сессией, ждёт готовности PipeWire/WirePlumber и через `pactl` автоматически выбирает порт `analog-output-headphones`, когда разъём передней панели доступен. Для диагностики установлены `pavucontrol`, `qpwgraph` и `alsa-utils`.
+
+Для принтеров и сканеров включены CUPS, SANE, проприетарный плагин HPLIP и Simple Scan. Пользователь добавлен в группы `lp` и `scanner`.
+
+## KDE Plasma и Dolphin
+
+`home/popov/kde-preset/` декларативно задаёт:
+
+- Breeze/Breeze Light, набор значков Breeze и фиолетовый accent `#6A0DAD`;
+- слайд-шоу из `home/popov/wallpaper/` с интервалом 24 часа;
+- нижнюю непрозрачную панель высотой 48 px на всех экранах с автоскрытием;
+- пустую новую сессию, отсутствие автосна и отключения дисплея от сети;
+- отсутствие автоматической блокировки и блокировки после resume;
+- закреплённые Dolphin, Konsole, Firefox, Discord, Steam, System Settings, virt-manager, KDE Connect, Android Studio, Zed, Heroic и AyuGram;
+- место `MyNixOS` в боковой панели Dolphin.
+
+Горячие клавиши:
+
+| Сочетание | Действие |
 | --- | --- |
-| `hosts/` | настройки конкретной машины |
-| `modules/` | системные NixOS-модули |
-| `home/` | Home Manager и пользовательские настройки |
-| `packages/` | локальные Nix package definitions |
+| `Meta` / `Alt+F1` | меню приложений |
+| `Meta+Enter` | Konsole |
+| `Meta+Q` | закрыть активное окно |
+| `Meta+W` | Overview |
+| `Meta+,` | показать окна |
 
----
+Для `*.nix` регистрируется MIME-тип `text/x-nix`, собственная иконка файла и шаблон «Nix File» в меню создания Dolphin. Activation-скрипт назначает Nix-иконку каталогам, содержащим `.nix` непосредственно внутри, в деревьях `~/MyNixOS` и `~/NixOS-vpnServer`. Файл `.nix-icon` включает её принудительно, `.no-nix-icon` отключает; чужие `.directory` не перезаписываются.
 
-## 🚀 Build
+## Программы
 
-### Собрать
+### Разработка
+
+- системно: GCC, Make, CMake, pkg-config, GDB, Python 3, pip, virtualenv и JDK 8;
+- в профиле пользователя: Android Studio, Android platform-tools/ADB, JDK 17, Kotlin, Gradle и Codex;
+- Zed с расширениями Nix, Kotlin, Java и XML, `nixd`, `nixfmt`, JetBrains Mono и темой NIX//UNDERGROUND;
+- Git с веткой `main`, редактором Micro и настроенным автором;
+- локальный пакет [`adb-qr`](packages/adb-qr/default.nix) для wireless ADB pairing по QR-коду.
+
+### Игры и запись
+
+Steam включает Remote Play, передачу игр по локальной сети и Protontricks. Пользовательский профиль добавляет Heroic, Legendary, ProtonUp-Qt, Gamescope и Lutris. GameMode включён системно, Vulkan Tools и Mesa Demos доступны для диагностики. OBS Studio использует PipeWire/WirePlumber и XDG portals.
+
+MangoHud имеет полный профиль `MangoHud.conf` и компактный `lite.conf`. Обёртки запускаются так:
 
 ```bash
+mangohud-full <команда>
+mangohud-lite <команда>
+```
+
+### Пользовательские приложения и утилиты
+
+Home Manager устанавливает Firefox с русской локалью и пользовательской фиолетовой темой, btop и bottom с темой NIX//UNDERGROUND, Fastfetch, Kate, Spectacle, Discord, AyuGram, qBittorrent, VLC, Strawberry, Darktable, Inkscape, LibreOffice, scrcpy и набор CLI-инструментов мониторинга.
+
+Baloo индексирует домашний каталог, исключая игры, накопители, кэши, Android/Gradle, Steam, виртуальные машины, корзину и `.git` этого репозитория.
+
+## Установка и применение
+
+### Требования
+
+- уже установленная NixOS с UEFI;
+- Git и доступ к интернету для получения flake inputs;
+- включённые `nix-command` и `flakes` (после первого применения они включаются конфигом);
+- проверенные резервные копии важных данных.
+
+### Подготовка для этого же компьютера
+
+```bash
+git clone https://github.com/12615az-droid/MyNixOS.git ~/MyNixOS
+cd ~/MyNixOS
 sudo nixos-rebuild build --flake .#nixos
-```
-
-или:
-
-```bash
-nbuild
-```
-
-### Протестировать
-
-```bash
 sudo nixos-rebuild test --flake .#nixos
-```
-
-или:
-
-```bash
-ntest
-```
-
-### Применить
-
-```bash
 sudo nixos-rebuild switch --flake .#nixos
 ```
 
-или:
+`build` только собирает систему, `test` активирует её до перезагрузки, а `switch` активирует и делает загрузочной по умолчанию. Перед первым `switch` внимательно просмотрите изменения.
 
-```bash
-rebuild
-```
+### Перенос на другой компьютер
 
----
+1. Создайте свежий `/etc/nixos/hardware-configuration.nix` командой `sudo nixos-generate-config` и перенесите релевантные значения в `hosts/nixos/hardware-configuration.nix`.
+2. Измените UUID и точки монтирования в `hardware-configuration.nix` и `hardware/disks.nix`.
+3. Замените `popov`, UID, домашний каталог, Git identity, SSH-ключ и пути в activation-скриптах.
+4. Пересмотрите AMDGPU, OpenRGB, `nct6687`, LACT/overdrive, CoolerControl и Wi-Fi workaround под своё оборудование.
+5. Измените фиксированный путь Firefox `6o792e29.default` либо удалите его, чтобы Home Manager не ожидал существующий профиль.
+6. Проверьте unfree-пакеты и принятие Android SDK license в соответствии со своими требованиями.
+7. Сначала выполните `nixos-rebuild build`, затем `test`, и только после проверки — `switch`.
 
-## 🔄 Update
+## Повседневное управление
 
-```bash
-nix flake update
-sudo nixos-rebuild switch --flake .#nixos
-```
+В Bash определены aliases:
 
-или:
-
-```bash
-nupdate
-```
-
----
-
-## 🌿 Git + Flakes
-
-Новые файлы должны быть добавлены в Git index перед сборкой:
-
-```bash
-git add path/to/file
-```
-
-Иначе Flake может не увидеть новый файл.
-
-Коммит для локальной сборки не обязателен.
-
----
-
-## ⚠️ Использование на другой машине
-
-Конфигурация привязана к конкретному компьютеру.
-
-Перед использованием на другом железе необходимо проверить как минимум:
-
-| Файл | Что изменить |
+| Команда | Назначение |
 | --- | --- |
-| `hosts/nixos/hardware-configuration.nix` | файловые системы и обнаруженное оборудование |
-| `hosts/nixos/hardware/amdgpu.nix` | графика / GPU |
-| `hosts/nixos/hardware/disks.nix` | дополнительные диски |
-| `hosts/nixos/hardware/bootloader.nix` | загрузчик |
-| `modules/users/default.nix` | пользователь |
-| `modules/system/locale.nix` | язык и timezone |
-| `modules/system/swap.nix` | swap / zram |
-| `home/popov/monitors.nix` | конфигурация мониторов |
-| `home/popov/git.nix` | Git user / email |
+| `nbuild` | собрать конфигурацию |
+| `ntest` | временно активировать конфигурацию |
+| `rebuild` | собрать и переключиться |
+| `nupdate` | обновить `flake.lock` и переключиться |
+| `nclean` | удалить старые поколения и мусор store |
+| `wsensors` | обновлять вывод `sensors` каждую секунду |
 
-Также потребуется заменить:
+Без alias используются команды:
 
-```text
-popov
-/home/popov
+```bash
+sudo nixos-rebuild build --flake ~/MyNixOS#nixos
+sudo nixos-rebuild test --flake ~/MyNixOS#nixos
+sudo nixos-rebuild switch --flake ~/MyNixOS#nixos
+(cd ~/MyNixOS && nix flake update)
 ```
 
-на данные другого пользователя.
+Nix автоматически запускает сборку мусора еженедельно, удаляет объекты старше 14 дней и еженедельно оптимизирует store.
 
----
+## Проверка и устранение проблем
 
-<div align="center">
+```bash
+# Проверить вычисление flake и собрать систему без переключения
+nix flake check --no-build
+sudo nixos-rebuild build --flake .#nixos
 
-**Ryzen 7 9700X · Radeon RX 5700 XT · KDE Plasma · NixOS**
+# Посмотреть ошибки текущей загрузки
+journalctl -b -p err
 
-</div>
+# Проверить графику и Vulkan
+glxinfo -B
+vulkaninfo --summary
+
+# Проверить виртуализацию
+virsh -c qemu:///system list --all
+
+# Проверить дополнительные монтирования
+systemctl status home-popov-Drives-HDD1.automount
+```
+
+Если Home Manager встречает существующий управляемый файл, он сохраняет его с расширением `.hm-backup`. Для libvirt по умолчанию используется `qemu:///system`; каталоги VM создаются в `~/VMs` и на HDD.
+
+## Известные особенности
+
+- В репозитории хранится публичный SSH-ключ и клиентский адрес сервера. Приватных ключей здесь быть не должно.
+- `cpu-monitoring.nix` создаёт правила для `intel-rapl:*`, хотя хост настроен как AMD; показания энергопотребления CPU могут быть недоступны без адаптации правила.
+- `modules/virtualization/virtiofs.nix` сейчас не импортируется, но `virtiofsd` подключён непосредственно в `modules/virtualization/default.nix`.
+- `stateVersion = "26.05"` задаёт совместимость состояния и не должен автоматически меняться при обычном обновлении системы.
+- Конфигурация разрешает unfree-пакеты и принимает лицензию Android SDK.
+
+## Лицензия и сторонние проекты
+
+В репозитории пока нет отдельного файла лицензии, поэтому права на повторное использование самой конфигурации явно не предоставлены. `adb-qr` — сторонний MIT-проект [aleixrodriala/adb-qr](https://github.com/aleixrodriala/adb-qr); этот репозиторий содержит только его Nix-упаковку.
