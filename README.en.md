@@ -88,7 +88,7 @@ flake.nix
 - power saving is disabled for the `rtw89_core` Wi-Fi driver;
 - AMDGPU is selected as the X.Org driver, with Mesa enabled for 64- and 32-bit applications;
 - LACT, AMDGPU overdrive, and CoolerControl are enabled;
-- OpenRGB runs as a system service with the bundled `norm2.orp` profile.
+- OpenRGB runs as a system service and loads the `nonrgb` profile, which disables the Kingston Fury DDR5 memory lighting.
 
 The system drive uses one Btrfs filesystem for `/` and the `/home` and `/nix` subvolumes. The EFI partition is mounted at `/boot`. A separate ext4 HDD is automounted at `/home/popov/Drives/HDD1` and unmounted after 300 idle seconds. All UUIDs are specific to the original machine.
 
