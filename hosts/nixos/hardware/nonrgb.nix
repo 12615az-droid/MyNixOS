@@ -8,7 +8,8 @@
   };
 
   systemd.services.openrgb.preStart = ''
-    ${pkgs.coreutils}/bin/install -Dm0644 \
+    ${pkgs.coreutils}/bin/mkdir -p /var/lib/OpenRGB/profiles
+    ${pkgs.coreutils}/bin/ln -sfn \
       ${./nonrgb.json} \
       /var/lib/OpenRGB/profiles/nonrgb.json
   '';
