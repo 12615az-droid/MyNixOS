@@ -14,6 +14,7 @@
       ntest = "cd   ~/MyNixOS  && sudo nixos-rebuild test --flake .#nixos";
 
       nclean = "sudo nix-collect-garbage -d";
+      napps-update = "cd  ~/MyNixOS  && sudo nix flake update mytop-linux olhm";
       nupdate = "cd  ~/MyNixOS  && sudo nix flake update && sudo nixos-rebuild switch --flake .#nixos";
 
       grep = "grep --color=auto";

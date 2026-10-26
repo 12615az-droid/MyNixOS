@@ -1,7 +1,7 @@
 { pkgs, ... }:
 
 let
-  adbQr = pkgs.callPackage ../../packages/adb-qr { };
+  adbQr = pkgs.callPackage ../../../packages/adb-qr { };
 in
 {
   home.packages = with pkgs; [

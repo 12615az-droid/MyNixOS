@@ -1,7 +1,7 @@
 { pkgs, ... }:
 
 let
-  theme = import ../../home/popov/kde-preset/theme.nix {
+  theme = import ../../home/popov/desktop/kde-preset/theme.nix {
     inherit pkgs;
   };
 

@@ -2,23 +2,11 @@
 
 {
   imports = [
-    ./adGuardVpn.nix
-    ./baloo.nix
-    ./btop.nix
-    ./development.nix
-    ./fastfetch.nix
-    ./function.nix
-    ./gaming.nix
-    ./git.nix
-    ./kde-preset
-    ./mangohud.nix
-    ./packages.nix
-    ./shell.nix
-    ./ssh.nix
-   ./Bottom.nix
-   ./zed.nix
-   ./firefox.nix
-
+    ./apps
+    ./development
+    ./desktop
+    ./gaming
+    ./terminal
   ];
 
   home.username = "popov";

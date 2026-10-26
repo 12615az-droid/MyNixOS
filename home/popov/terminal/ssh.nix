@@ -5,9 +5,9 @@
     enable = true;
     enableDefaultConfig = false;
 
-    matchBlocks."my-server" = {
-      hostname = "141.98.166.105";
-      user = "admin";
+    settings."my-server" = {
+      HostName = "141.98.166.105";
+      User = "admin";
     };
   };
 }

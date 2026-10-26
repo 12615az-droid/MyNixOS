@@ -72,9 +72,13 @@ flake.nix
 │   └── virtualization/               # libvirt/QEMU и Waydroid
 ├── home/popov/
 │   ├── default.nix                   # список пользовательских модулей
-│   ├── kde-preset/                   # Plasma Manager и интеграция Dolphin
+│   ├── apps/                         # приложения и общий набор пакетов
+│   ├── development/                  # инструменты и редакторы разработки
+│   ├── desktop/                      # Plasma, Baloo и оформление
+│   ├── gaming/                       # игры и MangoHud
+│   ├── terminal/                     # shell, SSH и терминальный мониторинг
 │   ├── wallpaper/                    # набор обоев
-│   └── *.nix                         # приложения, shell, Git, мониторинг и т. д.
+│   └── */default.nix                 # точки входа тематических групп
 └── packages/adb-qr/default.nix       # локальный derivation adb-qr
 ```
 
@@ -126,7 +130,7 @@ PipeWire предоставляет ALSA, 32-битную ALSA и совмест
 
 ## KDE Plasma и Dolphin
 
-`home/popov/kde-preset/` декларативно задаёт:
+`home/popov/desktop/kde-preset/` декларативно задаёт:
 
 - Breeze/Breeze Light, набор значков Breeze и фиолетовый accent `#6A0DAD`;
 - слайд-шоу из `home/popov/wallpaper/` с интервалом 24 часа;
@@ -172,6 +176,194 @@ mangohud-lite <команда>
 ### Пользовательские приложения и утилиты
 
 Home Manager устанавливает Firefox с русской локалью и пользовательской фиолетовой темой, btop и bottom с темой NIX//UNDERGROUND, Fastfetch, Kate, Spectacle, Discord, AyuGram, qBittorrent, VLC, Strawberry, Darktable, Inkscape, LibreOffice, scrcpy и набор CLI-инструментов мониторинга.
+
+### Приложения вне nixpkgs
+
+Собственные приложения и сторонние утилиты, которых нет в основном наборе `nixpkgs`, всё равно подключаются через Nix. Исходный код берётся из локального каталога, GitHub или другого реестра, а файл в `packages/` описывает его сборку и установку. После этого пакет добавляется в `home.packages` как любой штатный пакет.
+
+Текущий поток для собственных приложений выглядит так:
+
+```text
+flake.nix: input с исходниками
+└── extraSpecialArgs
+    └── home/popov/development/myprodgect.nix
+        └── pkgs.callPackage packages/<имя> { src = <input>.outPath; }
+            └── home.packages
+                └── профиль пользователя и меню Plasma
+```
+
+Сейчас этим способом подключены два локальных проекта:
+
+| Приложение | Источник | Описание сборки |
+| --- | --- | --- |
+| `mytop-linux` | `/home/popov/MyProject/MyTopLinux` | `packages/mytop-linux/default.nix` |
+| `olhm` | `/home/popov/MyProject/olhm` | `packages/olhm/default.nix` |
+
+В [`flake.nix`](flake.nix) `mytop-linux` объявлен как flake-проект, поэтому его вход `nixpkgs` следует за основной версией `nixpkgs`. У `olhm` нет собственного `flake.nix`, поэтому для него задано `flake = false`:
+
+```nix
+mytop-linux = {
+  url = "path:/home/popov/MyProject/MyTopLinux";
+  inputs.nixpkgs.follows = "nixpkgs";
+};
+
+olhm = {
+  url = "path:/home/popov/MyProject/olhm";
+  flake = false;
+};
+```
+
+Оба входа передаются модулям Home Manager через `extraSpecialArgs`. Модуль [`home/popov/development/myprodgect.nix`](home/popov/development/myprodgect.nix) получает их как аргументы `mytop-linux` и `olhm`, а затем вызывает локальные описания пакетов:
+
+```nix
+home.packages = [
+  (pkgs.callPackage ../../../packages/mytop-linux { src = mytop-linux.outPath; })
+  (pkgs.callPackage ../../../packages/olhm { src = olhm.outPath; })
+];
+```
+
+Здесь `outPath` — сохранённый Nix снимок исходников выбранного input. `callPackage` читает аргументы функции из `packages/<имя>/default.nix`, автоматически подставляет библиотеки и инструменты из `pkgs`, а `src` получает явно. Рабочие каталоги `~/MyProject/...` во время обычного запуска больше не используются.
+
+#### Что происходит при сборке
+
+1. Nix читает абсолютный `path:` из `flake.nix` и сверяет снимок каталога с хешем в `flake.lock`.
+2. `lib.cleanSourceWith` копирует исходники в Nix store, исключая результаты предыдущих локальных сборок: `target`, `result`, а для OLHM также `dist`.
+3. `rustPlatform.buildRustPackage` читает имя и версию из `Cargo.toml`, проверяет `Cargo.lock` и собирает проект в изолированном окружении Nix.
+4. Результат записывается в новый неизменяемый каталог вида `/nix/store/<hash>-<имя>-<версия>/`. В нём находятся `bin/`, desktop-файл, значок и необходимые обёртки.
+5. Home Manager создаёт общий пользовательский профиль и ссылки из `/etc/profiles/per-user/popov/` на выбранные результаты в Nix store. Старый результат остаётся частью предыдущего поколения и может быть возвращён откатом.
+
+Исходный код в `~/MyProject` является входом сборки, а не местом запуска. Поэтому сохранение файла `.rs`, новый локальный `cargo build` или замена `target/debug/<программа>` сами по себе не меняют приложение в меню Plasma. Требуется создать новый снимок input, собрать конфигурацию и активировать новое поколение.
+
+Проверить, какой результат сейчас запускается, можно так:
+
+```bash
+command -v mytop-linux
+readlink -f "$(command -v mytop-linux)"
+
+command -v olhm
+readlink -f "$(command -v olhm)"
+```
+
+Первая команда обычно показывает путь пользовательского профиля, а `readlink -f` — конкретный каталог сборки в `/nix/store` с версией программы.
+
+#### Как запускается MyTop Linux
+
+Описание [`packages/mytop-linux/default.nix`](packages/mytop-linux/default.nix) собирает бинарник `mytop-linux` с GTK 3 и WebKitGTK. `wrapGAppsHook3` создаёт обёртку, которая перед запуском добавляет пути к GTK-схемам, GIO-модулям и ресурсам приложения.
+
+Во время сборки происходят два дополнительных действия:
+
+- desktop-файл проекта устанавливается как `$out/share/applications/io.github.mytop.Linux.desktop`;
+- значок устанавливается как `$out/share/icons/hicolor/192x192/apps/mytop-linux.png`, а категория desktop-файла заменяется на `X-Myprodgect`.
+
+После активации Home Manager Plasma видит desktop-файл через пользовательский профиль. Нажатие на «MyTop» выполняет указанную в нём команду:
+
+```ini
+Exec=mytop-linux
+```
+
+Эту же программу можно запустить из терминала командой `mytop-linux`. Shell находит её в `/etc/profiles/per-user/popov/bin`, ссылка приводит к обёртке в Nix store, а та запускает настоящий Rust-бинарник с подготовленным окружением GTK.
+
+HTML, CSS, JavaScript, переводы и значок интерфейса встраиваются в бинарник во время компиляции через `include_str!` и `include_bytes!`. При запуске MyTop не читает интерфейс из `~/MyProject/MyTopLinux/ui`, поэтому правка этих файлов также требует новой сборки.
+
+Пользовательские данные хранятся отдельно от программы. По умолчанию это каталог `$XDG_DATA_HOME/mytop-linux`, обычно `~/.local/share/mytop-linux/`:
+
+```text
+~/.local/share/mytop-linux/
+├── mytop.sqlite3       # игры и настройки
+├── covers/             # импортированные обложки
+└── custom-font.bin     # импортированный шрифт, если он задан
+```
+
+Новая Nix-сборка заменяет код программы в профиле, но продолжает использовать этот каталог данных.
+
+#### Как запускается OLHM
+
+Описание [`packages/olhm/default.nix`](packages/olhm/default.nix) собирает `olhm` с feature `gui`. Desktop-файл создаётся самой Nix-конфигурацией и устанавливается как `$out/share/applications/olhm.desktop`. Его команда запуска:
+
+```ini
+Exec=olhm gui
+```
+
+Поэтому пункт «OLHM» в Plasma открывает графический интерфейс с начальной вкладкой CPU. Из терминала доступны тот же GUI и консольные режимы:
+
+```bash
+olhm gui
+olhm gui ram
+olhm gui storage
+olhm info cpu
+olhm snapshot ram
+olhm monitor storage --interval 2
+olhm collect cpu --format json
+```
+
+`wrapProgram` помещает перед настоящим бинарником shell-обёртку. Она добавляет в `LD_LIBRARY_PATH` OpenGL, Wayland и X11-библиотеки, а в `PATH` — `lsblk` из `util-linux` и `smartctl` из `smartmontools`. После подготовки окружения обёртка выполняет скрытый бинарник `.olhm-wrapped` из того же каталога Nix store.
+
+OLHM получает показатели непосредственно во время работы: читает доступные интерфейсы `/proc` и `/sys`, а для накопителей вызывает зафиксированные Nix-версии `lsblk` и `smartctl`. Отдельная рабочая копия проекта для этого не нужна. Часть SMART-показателей может быть недоступна, если у пользователя нет разрешения на чтение устройства; остальные доступные показатели продолжают отображаться.
+
+OLHM не хранит свою базу рядом с исходниками: после запуска он опрашивает оборудование и показывает текущие данные. Закрытие окна завершает процесс мониторинга.
+
+#### Как Plasma находит оба приложения
+
+[`home/popov/development/myprodgect.nix`](home/popov/development/myprodgect.nix) создаёт описание раздела меню `myprodgect` и правило, включающее desktop-файлы с категорией `X-Myprodgect`. После активации цепочка запуска выглядит так:
+
+```text
+пункт в меню Plasma
+└── desktop-файл из пользовательского профиля
+    ├── Exec=mytop-linux
+    │   └── GTK-обёртка → бинарник MyTop в /nix/store
+    └── Exec=olhm gui
+        └── shell-обёртка → бинарник OLHM в /nix/store
+```
+
+Удаление или переименование каталога `~/MyProject` после успешной активации обычно не мешает уже установленной версии запускаться: её снимок и бинарник находятся в Nix store. Однако следующая оценка или пересборка конфигурации завершится ошибкой, потому что `flake.nix` больше не найдёт локальный input.
+
+После изменения локального проекта нужно обновить только его запись в `flake.lock`, проверить конфигурацию и применить её:
+
+```bash
+cd ~/MyNixOS
+nix flake update mytop-linux   # либо olhm
+nbuild
+rebuild
+```
+
+`nix flake update` записывает новый хеш локального снимка в `flake.lock`. `nbuild` проверяет, что вся конфигурация собирается, но не меняет активный профиль. `rebuild` выполняет `nixos-rebuild switch`: активирует новое поколение, после чего новые команды и пункты меню указывают на свежие пути в Nix store. Уже открытый процесс продолжает выполнять старый бинарник до перезапуска приложения.
+
+Абсолютные `path:` зависят от расположения каталогов на этом компьютере. Для сборки прямо из GitHub достаточно заменить только URL источника; остальная схема остаётся прежней:
+
+```nix
+# Репозиторий с flake.nix
+mytop-linux = {
+  url = "github:OWNER/MyTopLinux";
+  inputs.nixpkgs.follows = "nixpkgs";
+};
+
+# Обычный репозиторий без flake.nix
+olhm = {
+  url = "github:OWNER/olhm";
+  flake = false;
+};
+```
+
+Конкретный коммит фиксируется в `flake.lock`, поэтому повторная сборка использует те же исходники. Команда `nix flake update mytop-linux` или `nix flake update olhm` подтягивает новую ревизию только выбранного приложения. Для привязки к ветке или тегу можно использовать URL вида `github:OWNER/REPO/BRANCH-OR-TAG`.
+
+Чтобы добавить ещё одну собственную программу или утилиту:
+
+1. Добавьте её источник в `inputs` файла `flake.nix`; для репозитория без flake укажите `flake = false`.
+2. Добавьте имя input в аргументы `outputs` и передайте его через `home-manager.extraSpecialArgs`.
+3. Создайте `packages/<имя>/default.nix` с подходящей функцией сборки: например, `rustPlatform.buildRustPackage`, `buildGoModule` или `python3Packages.buildPythonApplication`.
+4. Подключите derivation через `pkgs.callPackage` и добавьте результат в `home.packages`.
+5. Если приложение графическое, установите его `.desktop` и значок в `$out/share`; для раздела собственных программ задайте категорию `X-Myprodgect`.
+6. Обновите нужный input, выполните `nbuild`, а после успешной проверки — `rebuild`.
+
+`adb-qr` показывает ещё один вариант: [`packages/adb-qr/default.nix`](packages/adb-qr/default.nix) получает исходный архив из PyPI по имени, версии и SHA-256, добавляет Python-зависимости и `adb` в `PATH`, после чего подключается из `home/popov/development/development.nix`.
+
+Для уже собранных сторонних программ включены дополнительные способы запуска:
+
+- `programs.appimage.enable` и `binfmt` позволяют запускать скачанные AppImage;
+- `services.flatpak.enable` включает Flatpak, а сами приложения устанавливаются и обновляются командами Flatpak;
+- `programs.nix-ld.enable` помогает запускать некоторые динамически скомпонованные Linux-бинарники, ожидающие стандартные пути библиотек.
+
+Эти способы не добавляют конкретное приложение в конфигурацию автоматически. Для воспроизводимой установки предпочтительнее отдельный derivation с зафиксированными версией и хешем. Пакеты `.deb` напрямую в систему не устанавливаются: их содержимое нужно упаковать в derivation либо использовать уже готовое описание из `nixpkgs`. Поэтому `cisco-packet-tracer_9` сейчас закомментирован до добавления требуемого установочного файла в Nix store.
 
 Baloo индексирует домашний каталог, исключая игры, накопители, кэши, Android/Gradle, Steam, виртуальные машины, корзину и `.git` этого репозитория.
 

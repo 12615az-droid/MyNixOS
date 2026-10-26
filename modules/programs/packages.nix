@@ -34,6 +34,7 @@ programs.coolercontrol.enable = true;
 
     lm_sensors
 
-    cisco-packet-tracer_9
+    # cisco-packet-tracer_9 requires CiscoPacketTracer_901_Ubuntu_64bit.deb
+    # to be downloaded from NetAcad and added to the Nix store manually.
   ];
 }

@@ -1,15 +1,14 @@
-{ config, ... }:
+{ config, pkgs, ... }:
 
 {
   boot = {
+    kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest;
+
     # Графическая заставка вместо бегущих сообщений
     plymouth.enable = true;
 
     # Показывать только ошибки ядра
     consoleLogLevel = 3;
-
-    # Убрать обычные сообщения ранней загрузки NixOS
-    initrd.verbose = false;
 
     kernelParams = [
       "quiet"

@@ -72,9 +72,13 @@ flake.nix
 │   └── virtualization/               # libvirt/QEMU and Waydroid
 ├── home/popov/
 │   ├── default.nix                   # user module imports
-│   ├── kde-preset/                   # Plasma Manager and Dolphin integration
+│   ├── apps/                         # applications and shared package set
+│   ├── development/                  # development tools and editors
+│   ├── desktop/                      # Plasma, Baloo, and appearance
+│   ├── gaming/                       # games and MangoHud
+│   ├── terminal/                     # shell, SSH, and terminal monitoring
 │   ├── wallpaper/                    # wallpaper collection
-│   └── *.nix                         # apps, shell, Git, monitoring, and more
+│   └── */default.nix                 # entry points for thematic groups
 └── packages/adb-qr/default.nix       # local adb-qr derivation
 ```
 
@@ -126,7 +130,7 @@ CUPS, SANE, the proprietary HPLIP plugin, and Simple Scan support printing and s
 
 ## KDE Plasma and Dolphin
 
-`home/popov/kde-preset/` declaratively configures:
+`home/popov/desktop/kde-preset/` declaratively configures:
 
 - Breeze/Breeze Light, Breeze icons, and the purple `#6A0DAD` accent;
 - a 24-hour slideshow sourced from `home/popov/wallpaper/`;
