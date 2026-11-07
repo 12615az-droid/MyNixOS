@@ -12,6 +12,7 @@
     ./sesion.nix
     ./file-templates.nix
     ./places.nix
+    ./konsole.nix
   ];
 
   programs.plasma.enable = true;
