@@ -10,5 +10,6 @@
     ./myprodgect.nix
     ./opencode.nix
     ./zed.nix
+    ./ai-zen5.nix
   ];
 }
